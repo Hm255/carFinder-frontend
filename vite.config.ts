@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     proxy: {
-      '/api': {
+      '/cars': {
         target: 'http://localhost:9090',
         changeOrigin: true,
         secure: false,
