@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import CarList from '../components/CarList.vue'
 import HomePage from '../components/HomePage.vue'
-import ComparisonPage from '../components/ComparisonPage.vue';
+import CarComparison from '../components/CarComparison.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/ComparisonPage',
     name: 'ComparisonPage',
-    component: ComparisonPage,
+    component: CarComparison,
   },
 ];
 
