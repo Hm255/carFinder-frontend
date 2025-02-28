@@ -165,12 +165,12 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
   transition: border-color 0.3s, opacity 0.3s;
 }
 
-.car-card.selected {
-  border-color: #2196f3; /* Highlighted border color */
+.car-card.selected { /*highlights the border of a car selected for comparison*/ 
+  border-color: #2196f3; 
   box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
 }
 
-.car-card.dimmed {
+.car-card.dimmed { /*dims those not involved when the list size limit is reached*/ 
   opacity: 0.5;
   pointer-events: none;
 }

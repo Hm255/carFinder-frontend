@@ -28,7 +28,7 @@ export interface Car {
 export async function fetchCars(): Promise<Car[]> {
   try {
     const response = await axios.get<Car[]>(`${backendUrl}/cars`);
-    return response.data; // Since response.data is the array of Car objects
+    return response.data; 
   } catch (error: any) {
     console.error('Error fetching cars:', error);
     throw error;

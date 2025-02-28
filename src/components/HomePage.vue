@@ -3,13 +3,7 @@
   
   const searchQuery = ref('');
   
-  // example compare cars button function
-  // const compareCars = () => {
-  
-  //   console.log('Comparing cars based on search query:', searchQuery.value);
-  // };
-  
-  //example randomise car button function
+
   const randomiseCar = () => {
     
     console.log('Randomising a car selection');
@@ -76,15 +70,15 @@
   }
 
   .Link {
-  text-decoration: none; /* Removes underline */
-  color: inherit; /* Inherit color from the button */
-  /* Add any other styles you want */
+  text-decoration: none; 
+  color: inherit; 
+
 }
 
-/* Optional: Add hover styles */
+
 .Link:hover {
-  text-decoration: underline; /* Add underline on hover */
-  color: blue; /* Change color on hover */
+  text-decoration: underline; 
+  color: blue;
 }
   </style>
   
