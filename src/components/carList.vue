@@ -43,6 +43,7 @@ onMounted(() => {
           <th>Fuel Type</th>
           <th>Wheel Plan</th>
           <th>Power Output</th>
+          <th>Price</th>
         </tr>
       </thead>
       <tbody>
@@ -62,6 +63,7 @@ onMounted(() => {
          
           <td>{{ car.wheel_plan }}</td>
           <td>{{ car.power_output }} HP</td>
+          <td>£{{ car.price }}</td>
         </tr>
       </tbody>
     </table>
