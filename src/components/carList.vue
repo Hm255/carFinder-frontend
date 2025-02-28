@@ -21,7 +21,7 @@ const loadCars = async () => {
 
 const formatDate = (date: string | Date | null): string => {
   return date ? dayjs(date).format('MMM DD, YYYY') : 'N/A';
-};
+}; // date formatting by taking a string and reformatting, dropping null handling and leaving date formatted data alone
 
 onMounted(() => {
   loadCars();

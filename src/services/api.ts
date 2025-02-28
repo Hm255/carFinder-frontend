@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const backendUrl = 'http://localhost:9090'; // port the backend application runs on
 
-// export interface Car {
+// export interface Car { old cars format in the table
 //     registration_number: string; // character(7)
 //     make_id: number; // integer
 //     model_id: number; // integer
