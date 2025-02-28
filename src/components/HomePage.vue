@@ -4,10 +4,10 @@
   const searchQuery = ref('');
   
   // example compare cars button function
-  const compareCars = () => {
+  // const compareCars = () => {
   
-    console.log('Comparing cars based on search query:', searchQuery.value);
-  };
+  //   console.log('Comparing cars based on search query:', searchQuery.value);
+  // };
   
   //example randomise car button function
   const randomiseCar = () => {
@@ -25,7 +25,7 @@
         placeholder="Search for cars..."
       />
       <div class="buttons">
-        <button @click="compareCars">Compare</button>
+        <button><a class="Link" href="/ComparisonPage">Compare</a></button>
         <button @click="randomiseCar">Randomiser</button>
       </div>
     </div>
@@ -74,5 +74,17 @@
   button:hover {
     background-color: #e0ac00;
   }
+
+  .Link {
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Inherit color from the button */
+  /* Add any other styles you want */
+}
+
+/* Optional: Add hover styles */
+.Link:hover {
+  text-decoration: underline; /* Add underline on hover */
+  color: blue; /* Change color on hover */
+}
   </style>
   
