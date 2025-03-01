@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { fetchCars, type Car } from '../services/api.ts'
-// import dayjs from 'dayjs';
 
+interface SortOption {
+  field: keyof Car | null;
+  order: 'asc' | 'desc';
+}
 
 const cars = ref<Car[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
+const sortOption = ref<SortOption>({ field: null, order: 'asc' });
+const fuelTypeFilter = ref<string | null>(null); 
 
 const loadCars = async () => {
   try {
@@ -19,17 +24,65 @@ const loadCars = async () => {
   }
 };
 
-// const formatDate = (date: string | Date | null): string => {
-//   return date ? dayjs(date).format('MMM DD, YYYY') : 'N/A';
-// }; // date formatting by taking a string and reformatting, dropping null handling and leaving date formatted data alone
+const sortCars = (field: keyof Car) => {
+  if (sortOption.value.field === field) {
+    sortOption.value.order = sortOption.value.order === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortOption.value.field = field;
+    sortOption.value.order = 'asc';
+  }
+};
+
+
+const filteredCars = computed(() => {
+  if (!fuelTypeFilter.value) {
+    return cars.value; 
+  }
+  return cars.value.filter(car => car.fuel_type.toLowerCase() === fuelTypeFilter.value!.toLowerCase());
+});
+
+const sortedCars = computed(() => {
+  let carsToSort = filteredCars.value; 
+
+  if (!sortOption.value.field) {
+    return carsToSort;
+  }
+
+  const { field, order } = sortOption.value;
+  if (!field) {
+    return carsToSort;
+  }
+
+  return [...carsToSort].sort((a, b) => {
+    const aVal = a[field];
+    const bVal = b[field];
+
+    if (typeof aVal === 'number' && typeof bVal === 'number') {
+      return order === 'asc' ? aVal - bVal : bVal - aVal;
+    }
+    return 0;
+  });
+});
 
 onMounted(() => {
   loadCars();
 });
 </script>
+
 <template>
   <div>
     <h1>Car List</h1>
+
+    <div>
+      <label id="fuel-filter-label" for="fuel-type-select">Filter by Fuel Type: </label>
+      <select id="fuel-type-select" v-model="fuelTypeFilter">
+        <option value="">All</option>
+        <option value="petrol">Petrol</option>
+        <option value="diesel">Diesel</option>
+        <option value="electricity">Electric</option>
+      </select>
+    </div>
+
     <div v-if="loading">Loading cars...</div>
     <div v-else-if="error">{{ error }}</div>
     <table v-else>
@@ -37,30 +90,68 @@ onMounted(() => {
         <tr>
           <th>Car Name</th>
           <th>Color</th>
-          <th>Engine Size</th>
-          <th>Year of Manufacture</th>
-          <th>CO₂ Emissions</th>
+          <th>
+            <div class="sort-header">
+              Engine Size
+              <select @change="sortCars('engine_size')">
+                <option value="" disabled selected>Sort</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+          </th>
+          <th>
+            <div class="sort-header">
+              Year of Manufacture
+              <select @change="sortCars('year_of_manufacture')">
+                <option value="" disabled selected>Sort</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+          </th>
+          <th>
+            <div class="sort-header">
+              CO₂ Emissions
+              <select @change="sortCars('co2_emissions')">
+                <option value="" disabled selected>Sort</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+          </th>
           <th>Fuel Type</th>
           <th>Wheel Plan</th>
-          <th>Power Output</th>
-          <th>Price</th>
+          <th>
+            <div class="sort-header">
+              Power Output
+              <select @change="sortCars('power_output')">
+                <option value="" disabled selected>Sort</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+          </th>
+          <th>
+            <div class="sort-header">
+              Price
+              <select @change="sortCars('price')">
+                <option value="" disabled selected>Sort</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="car in cars" :key="car.registration_number">
-          
-          <td>{{ car.make, car.model }}</td>
-          
+        <tr v-for="car in sortedCars" :key="car.registration_number">
+          <td>{{ car.make }} {{ car.model }}</td>
           <td>{{ car.color }}</td>
           <td>{{ car.engine_size }} cc</td>
           <td>{{ car.year_of_manufacture }}</td>
-          
           <td>{{ car.co2_emissions }} g/km</td>
-          
-
-
           <td>{{ car.fuel_type }}</td>
-         
           <td>{{ car.wheel_plan }}</td>
           <td>{{ car.power_output }} HP</td>
           <td>£{{ car.price }}</td>
@@ -97,5 +188,15 @@ tr:hover {
 
 h1 {
   margin-bottom: 16px;
+}
+
+.sort-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.sort-header select{
+  margin-left: 5px;
 }
 </style>

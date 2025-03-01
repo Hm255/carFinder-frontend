@@ -29,7 +29,7 @@
 
 .nav-item {
   width: 640px; 
-  height: 70px; 
+  height: 40px; 
   margin-right: 1rem;
   display: flex; 
   align-items: center; 
@@ -40,7 +40,7 @@
   text-decoration: none;
   color: #000;
   font-family: 'Inter', sans-serif; 
-  font-size: 70px; 
+  font-size: 40px; 
   font-weight: bold;
 }
 
