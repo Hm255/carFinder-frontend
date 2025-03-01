@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { fetchCars, type Car } from '../services/api.ts'; // Import fetchCars and Car type
-import RandomCar from '../components/RandomCar.vue'; // Import the new component
+import { fetchCars, type Car } from '../services/api.ts'; 
+import RandomCar from '../components/RandomCar.vue';
 
 const searchQuery = ref('');
-const randomCar = ref<Car | null>(null); // Store the randomly selected car
-const cars = ref<Car[]>([]); // Store all cars
+const randomCar = ref<Car | null>(null); 
+const cars = ref<Car[]>([]); 
 const loading = ref(true);
 const error = ref<string | null>(null);
 
@@ -27,12 +27,12 @@ const randomiseCar = () => {
         const randomIndex = Math.floor(Math.random() * cars.value.length);
         randomCar.value = cars.value[randomIndex];
     } else{
-        randomCar.value = null; // Set to null if no cars are loaded
+        randomCar.value = null; 
     }
 
 };
 
-// Fetch cars when component is mounted.
+
 loadCars();
 </script>
 
@@ -59,10 +59,13 @@ loadCars();
 <style scoped>
 
 .main-content {
-  background-color: #87CEEB;
+
   padding: 2rem;
   text-align: center;
-  min-height: calc(100vh - 64px);
+  flex: 1;
+  max-width: 100%; 
+  margin: 0 auto;  
+    width: 100%; 
 }
 
 h1 {
@@ -74,7 +77,6 @@ input[type="text"] {
   padding: 0.75rem;
   font-size: 1.2rem;
   width: 60%;
-  max-width: 500px;
   border: none;
   border-radius: 8px;
   margin-bottom: 2rem;

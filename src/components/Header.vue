@@ -18,23 +18,32 @@
 .header {
   background-color: #F2BE00;
   padding: 1rem;
+  display: flex;       
+  align-items: center; 
+  justify-content: space-between;
+  width: 100%; 
+  box-sizing: border-box; 
 }
+
 
 .nav-list {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .nav-item {
-  width: 640px; 
-  height: 40px; 
   margin-right: 1rem;
   display: flex; 
   align-items: center; 
   justify-content: center; 
 }
+.nav-item:last-child{
+      margin-right: 0; 
+  }
 
 .nav-list a {
   text-decoration: none;
