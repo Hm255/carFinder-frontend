@@ -98,7 +98,7 @@ const isFavorite = (car: Car) => {
     <h1>Car List</h1>
 
     <div>
-      <label id="fuel-filter-label" for="fuel-type-select">Filter by Fuel Type:</label>
+      <label id="fuel-filter-label" for="fuel-type-select">Filter by Fuel Type: </label>
       <select id="fuel-type-select" v-model="fuelTypeFilter">
         <option value="">All</option>
         <option value="petrol">Petrol</option>

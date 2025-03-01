@@ -55,7 +55,7 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
 
     <div v-if="loading">Loading cars...</div>
     <div v-else-if="error">{{ error }}</div>
-    <div v-else>
+    <div v-else class="content-wrapper">
       <div class="car-cards">
         <div
           v-for="car in cars"
@@ -78,8 +78,9 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
           </button>
         </div>
       </div>
+
+      <h2 v-if="selectedCars.length > 0">Car Comparison</h2>
       <div v-if="selectedCars.length > 0" class="comparison">
-        <h2>Car Comparison</h2>
         <table>
           <thead>
             <tr>
@@ -135,7 +136,7 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
             <tr>
               <td>Price</td>
               <td v-for="car in selectedCars" :key="car.registration_number + '-price'">
-                £{{ car.price }}
+                {{ car.price }}
               </td>
             </tr>
           </tbody>
@@ -146,14 +147,26 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
 </template>
 
 <style scoped>
+/* ... (Your styles remain the same) ... */
 .car-comparison {
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content-wrapper {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .car-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+  justify-content: flex-start;
 }
 
 .car-card {
@@ -162,15 +175,17 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
   width: 300px;
   box-sizing: border-box;
   flex-shrink: 0;
+  flex-grow: 1;
+  max-width: calc(33.333% - 16px);
   transition: border-color 0.3s, opacity 0.3s;
 }
 
-.car-card.selected { /*highlights the border of a car selected for comparison*/ 
-  border-color: #2196f3; 
-  box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+.car-card.selected {
+  border-color: #F2BE00; /* Use CSS variable if defined */
+  box-shadow: 0 0 10px rgba(242, 190, 0, 0.5);
 }
 
-.car-card.dimmed { /*dims those not involved when the list size limit is reached*/ 
+.car-card.dimmed {
   opacity: 0.5;
   pointer-events: none;
 }
@@ -193,7 +208,8 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
 }
 
 .comparison {
-  margin-top: 32px;
+  margin-top: 16px; /* Reduced margin, now that the h2 is separate */
+   /* flex: 1; add this to allow for comparison table expansion */
 }
 
 .comparison table {
@@ -219,4 +235,5 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
 .comparison tr:nth-child(even) {
   background-color: #f9f9f9;
 }
+
 </style>
