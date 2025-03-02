@@ -8,11 +8,36 @@ interface SortOption {
   order: 'asc' | 'desc';
 }
 
+
+const wheelPlans = [
+    { wheel_plan_id: 1, wheel_plan_name: '2 WHEEL' },
+    { wheel_plan_id: 2, wheel_plan_name: '3 WHEEL' },
+    { wheel_plan_id: 3, wheel_plan_name: '2 AXLE RIGID BODY' },
+    { wheel_plan_id: 4, wheel_plan_name: '3 AXLE RIGID BODY' },
+    { wheel_plan_id: 5, wheel_plan_name: '4 AXLE RIGID BODY' },
+    { wheel_plan_id: 6, wheel_plan_name: '2 AXLE ARTICULATED' },
+    { wheel_plan_id: 7, wheel_plan_name: '3 AXLE ARTICULATED' },
+    { wheel_plan_id: 8, wheel_plan_name: '4 AXLE ARTICULATED' },
+    { wheel_plan_id: 9, wheel_plan_name: '3 WHEEL DRIVE' },
+    { wheel_plan_id: 10, wheel_plan_name: '4 WHEEL DRIVE' },
+    { wheel_plan_id: 11, wheel_plan_name: 'ALL WHEEL DRIVE' },
+    { wheel_plan_id: 12, wheel_plan_name: '6 WHEEL' },
+    { wheel_plan_id: 13, wheel_plan_name: '6 WHEEL DRAWBAR' },
+    { wheel_plan_id: 14, wheel_plan_name: '8 WHEEL RIGID BODY' },
+    { wheel_plan_id: 15, wheel_plan_name: 'LEFT-HAND DRIVE' },
+    { wheel_plan_id: 16, wheel_plan_name: 'QUADRICYCLE' },
+    { wheel_plan_id: 17, wheel_plan_name: 'TRAILER' },
+    { wheel_plan_id: 18, wheel_plan_name: 'SEMI-TRAILER' },
+    { wheel_plan_id: 19, wheel_plan_name: 'TRACTOR UNIT' },
+    { wheel_plan_id: 20, wheel_plan_name: 'OTHER' }
+];
+
 const cars = ref<Car[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const sortOption = ref<SortOption>({ field: null, order: 'asc' });
 const fuelTypeFilter = ref<string | null>(null);
+const wheelPlanFilter = ref<string | null>(null); // Keep as string | null
 const favoriteCars = ref<Car[]>([]);
 const router = useRouter();
 const route = useRoute();
@@ -41,17 +66,25 @@ const searchQuery = computed(() => {
   return route.query.search as string || '';
 });
 
-// No longer needed: watch(searchQuery, ...);  Keep the fuel filter!
+watch(searchQuery, () => {
+    fuelTypeFilter.value = null;
+    wheelPlanFilter.value = null;
+})
 
 const filteredCars = computed(() => {
   let filtered = cars.value;
 
-  // 1. Apply fuel filter (if present)
+ 
   if (fuelTypeFilter.value) {
     filtered = filtered.filter(car => car.fuel_type.toLowerCase() === fuelTypeFilter.value!.toLowerCase());
   }
 
-  // 2. Apply search filter (if present)
+  
+  if (wheelPlanFilter.value) {
+    filtered = filtered.filter(car => car.wheel_plan === wheelPlanFilter.value);
+  }
+
+  
   const query = searchQuery.value.toLowerCase().trim();
   if (query) {
     filtered = filtered.filter(car => {
@@ -59,16 +92,33 @@ const filteredCars = computed(() => {
         car.make.toLowerCase().includes(query) ||
         car.model.toLowerCase().includes(query) ||
         car.color.toLowerCase().includes(query) ||
-        car.fuel_type.toLowerCase().includes(query) || // Search fuel type again
+        car.fuel_type.toLowerCase().includes(query) ||
         car.registration_number.toLowerCase().includes(query)
       );
     });
   }
+      
+    const filterQuery = route.query.filter as string | undefined;
+    if(filterQuery === 'affordable'){
+        return [...filtered]
+            .sort((a, b) => {
+                if (a.year_of_manufacture !== b.year_of_manufacture) {
+                    return b.year_of_manufacture - a.year_of_manufacture;
+                }
+                return a.price - b.price;
+            });
+    } else if(filterQuery === 'luxury'){
+        return [...filtered]
+        .sort((a, b) => {
+            if (a.year_of_manufacture !== b.year_of_manufacture) {
+                return b.year_of_manufacture - a.year_of_manufacture;
+            }
+        return b.price - a.price;
+        });
+    }
 
-  return filtered; // Return the *combined* result
+  return filtered;
 });
-
-
 
 const sortedCars = computed(() => {
   let carsToSort = filteredCars.value;
@@ -128,13 +178,21 @@ const goToCarDetails = (car: Car) => {
   <div>
     <h1>Car List</h1>
 
-    <div>
+    <div class="filter-container">
       <label id="fuel-filter-label" for="fuel-type-select">Filter by Fuel Type: </label>
       <select id="fuel-type-select" v-model="fuelTypeFilter">
         <option value="">All</option>
         <option value="petrol">Petrol</option>
         <option value="diesel">Diesel</option>
         <option value="electricity">Electric</option>
+      </select>
+
+      <label id="wheel-plan-label" for="wheel-plan-select">Filter by Wheel Plan: </label>
+      <select id="wheel-plan-select" v-model="wheelPlanFilter">
+        <option value="">All</option>
+        <option v-for="plan in wheelPlans" :key="plan.wheel_plan_id" :value="plan.wheel_plan_name">
+          {{ plan.wheel_plan_name }}
+        </option>
       </select>
     </div>
 
@@ -228,7 +286,7 @@ const goToCarDetails = (car: Car) => {
 </template>
 
 <style scoped>
-/* ... (Your existing styles - no changes needed here) ... */
+
 
 .table-container {
   overflow-x: auto;
@@ -246,14 +304,14 @@ th, td {
   border: 1px solid #ddd;
   padding: 8px;
   white-space: nowrap;
-  color: white; /* White text */
+  color: white;
 }
 
 th {
-  background-color: #2c3e50; /* Darker background for header */
+  background-color: #2c3e50;
   text-align: left;
 }
-/* Target the rows you want to be yellow/gold */
+
 tr:nth-child(even) {
     background-color: #099999;
 }
@@ -284,11 +342,21 @@ h1 {
     width: 100%;
 }
 
-/* Make the rows clickable */
 .clickable-row {
   cursor: pointer;
 }
 .clickable-row:hover{
     background-color: #ddd;
+}
+
+.filter-container{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+#fuel-filter-label, #wheel-plan-label{
+    color: var(--text-color);
 }
 </style>

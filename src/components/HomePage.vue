@@ -10,6 +10,7 @@ const cars = ref<Car[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const router = useRouter();
+const activeFilter = ref<string | null>(null); 
 
 const loadCars = async () => {
   try {
@@ -63,6 +64,48 @@ const searchCars = () => {
     }
 }
 
+
+const newAndAffordableCars = computed(() => {
+  if (!cars.value.length) return []; 
+  return [...cars.value] 
+    .sort((a, b) => {
+      if (a.year_of_manufacture !== b.year_of_manufacture) {
+        return b.year_of_manufacture - a.year_of_manufacture;
+      }
+      
+      return a.price - b.price;
+    });
+});
+console.log(newAndAffordableCars)
+
+const LuxuryCars = computed(() => {
+  if (!cars.value.length) return [];
+  return [...cars.value]
+    .sort((a, b) => {
+      
+      if (a.year_of_manufacture !== b.year_of_manufacture) {
+        return b.year_of_manufacture - a.year_of_manufacture;
+      }
+     
+      return b.price - a.price;
+    });
+});
+console.log(LuxuryCars)
+
+const showNewAndAffordable = () => {
+  activeFilter.value = 'affordable'; 
+  router.push({ path: '/cars', query: { filter: 'affordable' } });
+};
+
+const showNewAndLuxury = () => {
+  activeFilter.value = 'luxury'; 
+  router.push({ path: '/cars', query: { filter: 'luxury' } });
+};
+
+const clearFilters = () => {
+     router.push({path: '/cars'});
+}
+
 onMounted(loadCars);
 </script>
 
@@ -83,6 +126,12 @@ onMounted(loadCars);
     <div class="buttons">
       <button @click="() => router.push('/ComparisonPage')">Compare</button>
       <button @click="randomiseCar">Randomiser</button>
+    </div>
+
+    <div class="filter-buttons">
+      <button @click="showNewAndAffordable" :class="{ active: activeFilter === 'affordable' }">New &amp; Affordable</button>
+      <button @click="showNewAndLuxury" :class="{ active: activeFilter === 'luxury' }">Luxury</button>
+        <button @click="clearFilters" :class="{ active: activeFilter === null }">Clear Filters</button>
     </div>
 
     <div v-if="loading">Loading cars...</div>
@@ -113,28 +162,29 @@ h1 {
     color: var(--text-color);
 }
 
-/* NEW: Style for the search group */
+
 .search-group {
-  display: flex;        /* Use flexbox to keep input and button together */
-  align-items: center;  /* Vertically align */
-  gap: 1rem;           /* Space between input and button */
-  margin-bottom: 2rem; /* Space *below* the search group */
+  display: flex;        
+  align-items: center;  
+  gap: 1rem;           
+  margin-bottom: 1rem; 
   width: 60%;
   max-width: 800px;
 }
-/*style for search input*/
+
 input[type="text"] {
   padding: 0.75rem;
   font-size: 1.2rem;
   border: none;
   border-radius: 8px;
-    flex: 1; /*add this so then search bar will take as much space as available*/
+    flex: 1; 
 }
 
 .buttons {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 button {
@@ -162,8 +212,16 @@ text-decoration: underline;
 color: blue;
 }
 
-.buttons{
-  padding-bottom: 40px;
+
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem; 
+}
+
+.active {
+  background-color: #e0ac00;
 }
 
 .main-content > div {
