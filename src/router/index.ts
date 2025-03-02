@@ -3,6 +3,9 @@ import CarList from '../components/CarList.vue'
 import HomePage from '../components/HomePage.vue'
 import CarComparison from '../components/CarComparison.vue';
 import Favourites from '../components/Favourites.vue';
+import CarInfo from '../components/CarInfo.vue';
+import Payment from '../components/Payment.vue';
+import PaymentComplete from '../components/PaymentComplete.vue';
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -20,9 +23,24 @@ const routes: Array<RouteRecordRaw> = [
     component: CarComparison,
   },
   {
-    path: '/favourites', // Use the correct path
-    name: 'Favourites',
+    path: '/favourites', 
+      name: 'Favourites',
     component: Favourites,
+  },
+  {
+    path: '/cars/:registrationNumber',
+    name: 'CarInfo',
+    component: CarInfo,
+  },
+  {
+    path: '/cars/:registrationNumber/payment',
+    name: 'Payment',
+    component: Payment,
+  },
+  {
+    path: '/cars/:registrationNumber/payment/PaymentComplete', 
+    name: 'PaymentComplete',
+    component: PaymentComplete,
   },
 ];
 

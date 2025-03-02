@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue';
 import { fetchCars, type Car } from '../services/api.ts'
+import { useRouter, useRoute } from 'vue-router';
 
 interface SortOption {
   field: keyof Car | null;
@@ -12,8 +13,9 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 const sortOption = ref<SortOption>({ field: null, order: 'asc' });
 const fuelTypeFilter = ref<string | null>(null);
-const favoriteCars = ref<Car[]>([]); 
-
+const favoriteCars = ref<Car[]>([]);
+const router = useRouter();
+const route = useRoute();
 
 const loadCars = async () => {
   try {
@@ -35,12 +37,38 @@ const sortCars = (field: keyof Car) => {
   }
 };
 
-const filteredCars = computed(() => {
-  if (!fuelTypeFilter.value) {
-    return cars.value;
-  }
-  return cars.value.filter(car => car.fuel_type.toLowerCase() === fuelTypeFilter.value!.toLowerCase());
+const searchQuery = computed(() => {
+  return route.query.search as string || '';
 });
+
+// No longer needed: watch(searchQuery, ...);  Keep the fuel filter!
+
+const filteredCars = computed(() => {
+  let filtered = cars.value;
+
+  // 1. Apply fuel filter (if present)
+  if (fuelTypeFilter.value) {
+    filtered = filtered.filter(car => car.fuel_type.toLowerCase() === fuelTypeFilter.value!.toLowerCase());
+  }
+
+  // 2. Apply search filter (if present)
+  const query = searchQuery.value.toLowerCase().trim();
+  if (query) {
+    filtered = filtered.filter(car => {
+      return (
+        car.make.toLowerCase().includes(query) ||
+        car.model.toLowerCase().includes(query) ||
+        car.color.toLowerCase().includes(query) ||
+        car.fuel_type.toLowerCase().includes(query) || // Search fuel type again
+        car.registration_number.toLowerCase().includes(query)
+      );
+    });
+  }
+
+  return filtered; // Return the *combined* result
+});
+
+
 
 const sortedCars = computed(() => {
   let carsToSort = filteredCars.value;
@@ -65,7 +93,6 @@ const sortedCars = computed(() => {
   });
 });
 
-
 onMounted(() => {
   loadCars();
   const storedFavorites = localStorage.getItem('favorites');
@@ -74,7 +101,6 @@ onMounted(() => {
   }
 });
 
-
 watch(favoriteCars, (newFavorites) => {
   localStorage.setItem('favorites', JSON.stringify(newFavorites));
 }, { deep: true });
@@ -82,15 +108,20 @@ watch(favoriteCars, (newFavorites) => {
 const toggleFavorite = (car: Car) => {
   const index = favoriteCars.value.findIndex(favCar => favCar.registration_number === car.registration_number);
   if (index === -1) {
-    favoriteCars.value.push(car); 
+    favoriteCars.value.push(car);
   } else {
-    favoriteCars.value.splice(index, 1); 
+    favoriteCars.value.splice(index, 1);
   }
 };
 
 const isFavorite = (car: Car) => {
-    return favoriteCars.value.some(favCar => favCar.registration_number === car.registration_number)
+  return favoriteCars.value.some(favCar => favCar.registration_number === car.registration_number)
 }
+
+const goToCarDetails = (car: Car) => {
+  router.push({ name: 'CarInfo', params: { registrationNumber: car.registration_number } });
+};
+
 </script>
 
 <template>
@@ -98,12 +129,12 @@ const isFavorite = (car: Car) => {
     <h1>Car List</h1>
 
     <div>
-      <label id="fuel-filter-label" for="fuel-type-select">Filter by Fuel Type:</label>
+      <label id="fuel-filter-label" for="fuel-type-select">Filter by Fuel Type: </label>
       <select id="fuel-type-select" v-model="fuelTypeFilter">
         <option value="">All</option>
         <option value="petrol">Petrol</option>
         <option value="diesel">Diesel</option>
-        <option value="electric">Electric</option>
+        <option value="electricity">Electric</option>
       </select>
     </div>
 
@@ -171,7 +202,7 @@ const isFavorite = (car: Car) => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="car in sortedCars" :key="car.registration_number">
+          <tr v-for="car in sortedCars" :key="car.registration_number" @click="goToCarDetails(car)" class="clickable-row">
             <td>{{ car.make }} {{ car.model }}</td>
             <td>{{ car.color }}</td>
             <td>{{ car.engine_size }} cc</td>
@@ -182,18 +213,23 @@ const isFavorite = (car: Car) => {
             <td>{{ car.power_output }} HP</td>
             <td>£{{ car.price }}</td>
             <td class="button-cell">
-              <button @click="toggleFavorite(car)" class="favorite-button">
+              <button @click.stop="toggleFavorite(car)" class="favorite-button">
                 {{ isFavorite(car) ? 'Remove from Favorites' : 'Add to Favorites' }}
               </button>
             </td>
           </tr>
         </tbody>
       </table>
+      <div v-if="!loading && sortedCars.length === 0">
+        No cars found.
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+/* ... (Your existing styles - no changes needed here) ... */
+
 .table-container {
   overflow-x: auto;
   width: 100%;
@@ -210,28 +246,25 @@ th, td {
   border: 1px solid #ddd;
   padding: 8px;
   white-space: nowrap;
-  color: white; 
+  color: white; /* White text */
 }
 
 th {
-  background-color: #2c3e50; 
+  background-color: #2c3e50; /* Darker background for header */
   text-align: left;
 }
-
+/* Target the rows you want to be yellow/gold */
 tr:nth-child(even) {
-  background-color: #099999; 
+    background-color: #099999;
 }
 tr:nth-child(odd) {
     background-color: #242424;
 }
 
-tr:hover {
-  background-color: #ddd;
-}
 
 h1 {
   margin-bottom: 16px;
-    color: var(--text-color); 
+    color: var(--text-color);
 }
 
 .sort-header {
@@ -249,5 +282,13 @@ h1 {
 }
 .favorite-button{
     width: 100%;
+}
+
+/* Make the rows clickable */
+.clickable-row {
+  cursor: pointer;
+}
+.clickable-row:hover{
+    background-color: #ddd;
 }
 </style>

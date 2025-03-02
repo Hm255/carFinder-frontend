@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { toRefs } from 'vue';
 import type { Car } from '../services/api';
 
-defineProps<{
+const props = defineProps<{
   car: Car;
 }>();
+
+const { car } = toRefs(props);
 </script>
 
 <template>
-  <div class="car-card">
+  <router-link :to="{ name: 'CarInfo', params: { registrationNumber: car.registration_number } }" class="car-card">
     <h2>{{ car.make }} {{ car.model }}</h2>
     <ul>
       <li><strong>Color:</strong> {{ car.color }}</li>
@@ -19,30 +22,56 @@ defineProps<{
       <li><strong>Power Output:</strong> {{ car.power_output }} HP</li>
       <li><strong>Price:</strong> £{{ car.price }}</li>
     </ul>
-  </div>
+  </router-link>
 </template>
 
 <style scoped>
-
 .car-card {
   border: 1px solid #ddd;
   padding: 16px;
-  width: 300px; 
+  width: 300px;
   box-sizing: border-box;
-  margin: 0 auto;
-  margin-bottom: 1rem;
+  flex-shrink: 0;
+  flex-grow: 1;
+  max-width: calc(33.333% - 16px);
+  transition: border-color 0.3s, opacity 0.3s;
+    display: block; /* Important: Make router-link a block-level element */
+  text-decoration: none; /* Remove default link underline */
+  color: inherit; /* Inherit text color */
+}
+
+.car-card.selected {
+  border-color: var(--primary-yellow); /* Use CSS variable */
+  box-shadow: 0 0 10px rgba(242, 190, 0, 0.5);
+}
+
+.car-card.dimmed {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .car-card h2 {
   margin-top: 0;
+   color: var(--text-color);
 }
 
 .car-card ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
 }
 
 .car-card ul li {
   margin-bottom: 8px;
+   color: var(--text-color);
+}
+
+.car-card button {
+  margin-top: 16px;
+}
+
+/* Style for the active car card (optional) */
+.router-link-active {
+  border-color: var(--primary-yellow);
+  box-shadow: 0 0 10px rgba(242, 190, 0, 0.5);
 }
 </style>
