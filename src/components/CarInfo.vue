@@ -5,7 +5,7 @@ import { fetchCars, type Car } from '../services/api';
 
 const car = ref<Car | null>(null);
 const loading = ref(true);
-const error = ref<string | null>(null);
+const error = ref<string | null>(null); // Keep for other errors
 const route = useRoute();
 const router = useRouter();
 
@@ -13,8 +13,9 @@ onMounted(async () => {
   try {
     const registrationNumber = route.params.registrationNumber as string;
     if (!registrationNumber) {
-      error.value = 'Car registration number is missing.';
-      return;
+      // Redirect to 404 if no registration number
+      router.push({ name: 'NotFound' });
+      return; // Stop execution here
     }
 
     const allCars = await fetchCars();
@@ -23,10 +24,12 @@ onMounted(async () => {
     if (foundCar) {
       car.value = foundCar;
     } else {
-      error.value = 'Car not found.';
+      // Redirect to 404 if car not found
+      router.push({ name: 'NotFound' });
+      return; // Stop execution
     }
   } catch (err: any) {
-    error.value = 'Failed to load car details.';
+    error.value = 'Failed to load car details.'; // Keep for other errors
     console.error('Error:', err);
   } finally {
     loading.value = false;
@@ -40,23 +43,23 @@ const goToPayment = () => {
 };
 
 const formatDate = (dateString: string): string => {
-  if (!dateString) {
-    return 'N/A';
-  }
-  try {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
+    if (!dateString) {
+        return 'N/A';
+    }
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return 'Invalid Date';
+          }
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    } catch (error) {
+      console.error("Error parsing date:", dateString, error);
       return 'Invalid Date';
     }
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  } catch (error) {
-    console.error("Error parsing date:", dateString, error);
-    return 'Invalid Date';
-  }
 };
 </script>
 
@@ -123,8 +126,8 @@ const formatDate = (dateString: string): string => {
           <span class="detail-value">{{ car.power_output }} HP</span>
         </div>
         <div class="detail-row">
-          <span class="detail-label">Tax Status:</span>
-          <span class="detail-value">{{ car.tax_status }}</span>
+            <span class="detail-label">Tax Status:</span>
+            <span class="detail-value">{{car.tax_status}}</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Price:</span>
@@ -153,16 +156,11 @@ const formatDate = (dateString: string): string => {
   max-width: 800px;
   margin: 0 auto;
   background-color: #099999;
-  
 }
 
 .car-info h1 {
   margin-bottom: 1rem;
-  color: var(--text-color); 
-}
-
-h2 {
-    color: var(--text-color);
+  color: var(--text-color);
 }
 
 .car-details {
@@ -173,24 +171,24 @@ h2 {
 }
 
 .detail-row {
-  display: contents; 
+  display: contents;
 }
 
 .detail-label {
   font-weight: bold;
   text-align: left;
-  color: var(--text-color); 
+  color: var(--text-color);
 }
 
 .detail-value {
   text-align: left;
-  color: var(--text-color); 
+  color: var(--text-color);
 }
 
 .payment-button {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  background-color: var(--primary-yellow); 
+  background-color: var(--primary-yellow);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -199,6 +197,6 @@ h2 {
 }
 
 .payment-button:hover {
-  background-color: #e0ac00; 
+  background-color: #e0ac00;
 }
 </style>

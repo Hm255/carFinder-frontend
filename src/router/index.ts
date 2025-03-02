@@ -6,6 +6,7 @@ import Favourites from '../components/Favourites.vue';
 import CarInfo from '../components/CarInfo.vue';
 import Payment from '../components/Payment.vue';
 import PaymentComplete from '../components/PaymentComplete.vue';
+import NotFound from '../components/404.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -42,6 +43,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'PaymentComplete',
     component: PaymentComplete,
   },
+  {
+    path: '/:pathMatch(.*)*', 
+    name: 'NotFound', 
+    component: NotFound,
+  }
 ];
 
 const router = createRouter({

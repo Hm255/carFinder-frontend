@@ -147,7 +147,7 @@ const goToCarDetails = (car: Car) => {
             <tr>
               <td>Price</td>
               <td v-for="car in selectedCars" :key="car.registration_number + '-price'">
-                {{ car.price }}
+                £{{ car.price }}
               </td>
             </tr>
           </tbody>
