@@ -156,6 +156,8 @@ const formatDate = (dateString: string): string => {
   max-width: 800px;
   margin: 0 auto;
   background-color: #099999;
+  border: 1px solid black; 
+  border-radius: 8px; 
 }
 
 .car-info h1 {
