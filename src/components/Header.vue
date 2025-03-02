@@ -60,7 +60,7 @@
     color: blue;
 }
 
-/* Style the active link */
+
 .nav-list a.router-link-active {
   text-decoration: underline; 
   color:  #0C00F0; 

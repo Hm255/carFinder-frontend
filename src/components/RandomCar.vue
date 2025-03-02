@@ -35,13 +35,13 @@ const { car } = toRefs(props);
   flex-grow: 1;
   max-width: calc(33.333% - 16px);
   transition: border-color 0.3s, opacity 0.3s;
-    display: block; /* Important: Make router-link a block-level element */
-  text-decoration: none; /* Remove default link underline */
-  color: inherit; /* Inherit text color */
+    display: block; 
+  text-decoration: none; 
+  color: inherit; 
 }
 
 .car-card.selected {
-  border-color: var(--primary-yellow); /* Use CSS variable */
+  border-color: var(--primary-yellow); 
   box-shadow: 0 0 10px rgba(242, 190, 0, 0.5);
 }
 
@@ -69,7 +69,7 @@ const { car } = toRefs(props);
   margin-top: 16px;
 }
 
-/* Style for the active car card (optional) */
+
 .router-link-active {
   border-color: var(--primary-yellow);
   box-shadow: 0 0 10px rgba(242, 190, 0, 0.5);

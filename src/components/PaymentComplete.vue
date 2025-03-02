@@ -12,15 +12,15 @@ const error = ref<string | null>(null);
 
 onMounted(async () => {
   try {
-    registrationNumber.value = route.params.registrationNumber as string; // Get reg number
+    registrationNumber.value = route.params.registrationNumber as string; 
     if (!registrationNumber.value) {
-      throw new Error('Registration number is required'); //best practice to throw error
+      throw new Error('Registration number is required'); 
     }
-     const cars = await fetchCars(); // Get car data
+     const cars = await fetchCars(); 
      const foundCar = cars.find(c => c.registration_number === registrationNumber.value);
 
      if (foundCar) {
-          car.value = foundCar; // Set car value
+          car.value = foundCar; 
         } else {
           error.value = 'Car not found.';
         }

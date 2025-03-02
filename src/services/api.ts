@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-// const backendUrl = 'http://localhost:9090'; 
-
 export interface Car {
   registration_number: string;
   make: string;

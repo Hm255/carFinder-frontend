@@ -2,13 +2,13 @@
 import { ref, onMounted, computed } from 'vue';
 import { fetchCars } from '../services/api';
 import type { Car } from '../services/api';
-import { useRouter } from 'vue-router'; // Import useRouter
+import { useRouter } from 'vue-router'; 
 
 const cars = ref<Car[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const selectedCars = ref<Car[]>([]);
-const router = useRouter(); // Get the router instance
+const router = useRouter(); 
 
 const loadCars = async () => {
   try {
@@ -49,7 +49,7 @@ const toggleCarSelection = (car: Car) => {
 
 const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
 
-// Function to handle navigation
+
 const goToCarDetails = (car: Car) => {
   router.push({ name: 'CarInfo', params: { registrationNumber: car.registration_number } });
 };
@@ -192,7 +192,7 @@ const goToCarDetails = (car: Car) => {
 }
 
 .car-card.selected {
-  border-color: var(--primary-yellow); /* Use CSS variable */
+  border-color: var(--primary-yellow); 
   box-shadow: 0 0 10px rgba(242, 190, 0, 0.5);
 }
 
@@ -203,7 +203,7 @@ const goToCarDetails = (car: Car) => {
 
 .car-card h2 {
   margin-top: 0;
-    color: var(--text-color); /* Use text-color here and in ul*/
+    color: var(--text-color); 
 }
 
 .car-card ul {
@@ -220,7 +220,7 @@ const goToCarDetails = (car: Car) => {
   margin-top: 16px;
 }
 
-/* Table Styles */
+
 .comparison {
   margin-top: 16px;
 }
@@ -234,23 +234,23 @@ const goToCarDetails = (car: Car) => {
 .comparison td {
   border: 1px solid #ddd;
   padding: 8px;
-  color: white; /* White text */
+  color: white; 
 }
 
 .comparison th {
-  background-color: #2c3e50; /* Darker background for header */
+  background-color: #2c3e50; 
   text-align: center;
 }
 
-/* Target the rows you want to be yellow/gold */
+
 .comparison tr:nth-child(even) {
-  background-color: #099999; /* Use your yellow color */
+  background-color: #099999; 
 }
 .comparison tr:nth-child(odd) {
    background-color: #242424;
  }
 
-/* Make table headers clickable */
+
 .clickable-header {
   cursor: pointer;
 }
