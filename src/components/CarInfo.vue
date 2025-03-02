@@ -34,12 +34,30 @@ onMounted(async () => {
 });
 
 const goToPayment = () => {
- 
   if (car.value) {
     router.push({ name: 'Payment', params: { registrationNumber: car.value.registration_number } });
   }
 };
 
+const formatDate = (dateString: string): string => {
+  if (!dateString) {
+    return 'N/A';
+  }
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return 'Invalid Date';
+    }
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } catch (error) {
+    console.error("Error parsing date:", dateString, error);
+    return 'Invalid Date';
+  }
+};
 </script>
 
 <template>
@@ -70,7 +88,7 @@ const goToPayment = () => {
         </div>
         <div class="detail-row">
           <span class="detail-label">Date of Manufacture:</span>
-          <span class="detail-value">{{ car.date_of_manufacture }}</span>
+          <span class="detail-value">{{ formatDate(car.date_of_manufacture) }}</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">CO₂ Emissions:</span>
@@ -78,15 +96,15 @@ const goToPayment = () => {
         </div>
         <div class="detail-row">
           <span class="detail-label">Tax Due Date:</span>
-          <span class="detail-value">{{ car.tax_due_date }}</span>
+          <span class="detail-value">{{ formatDate(car.tax_due_date) }}</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Date of Last V5C Issued:</span>
-          <span class="detail-value">{{ car.date_of_last_v5c_issued }}</span>
+          <span class="detail-value">{{ formatDate(car.date_of_last_v5c_issued) }}</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">First Used Date:</span>
-          <span class="detail-value">{{ car.first_used_date }}</span>
+          <span class="detail-value">{{ formatDate(car.first_used_date) }}</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Marked for Export:</span>
@@ -105,8 +123,8 @@ const goToPayment = () => {
           <span class="detail-value">{{ car.power_output }} HP</span>
         </div>
         <div class="detail-row">
-            <span class="detail-label">Tax Status:</span>
-            <span class="detail-value">{{car.tax_status}}</span>
+          <span class="detail-label">Tax Status:</span>
+          <span class="detail-value">{{ car.tax_status }}</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Price:</span>
@@ -120,9 +138,8 @@ const goToPayment = () => {
           <span class="detail-label">Wheel Plan:</span>
           <span class="detail-value">{{ car.wheel_plan }}</span>
         </div>
-
       </div>
-       <button @click="goToPayment" class="payment-button">Go to Payment</button>
+      <button @click="goToPayment" class="payment-button">Go to Payment</button>
     </div>
     <div v-else>
       No car data available.
@@ -131,41 +148,44 @@ const goToPayment = () => {
 </template>
 
 <style scoped>
-
 .car-info {
   padding: 20px;
   max-width: 800px;
   margin: 0 auto;
+  background-color: #099999;
+  
 }
 
 .car-info h1 {
   margin-bottom: 1rem;
+  color: var(--text-color); 
+}
+
+h2 {
     color: var(--text-color);
 }
 
-
 .car-details {
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  gap: 0.5rem; 
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
 .detail-row {
-    display: contents; 
+  display: contents; 
 }
 
 .detail-label {
   font-weight: bold;
-  text-align: left; 
-  color: var(--text-color);
+  text-align: left;
+  color: var(--text-color); 
 }
 
 .detail-value {
-  text-align: left; 
-    color: var(--text-color);
+  text-align: left;
+  color: var(--text-color); 
 }
-
 
 .payment-button {
   padding: 0.75rem 1.5rem;
@@ -175,7 +195,7 @@ const goToPayment = () => {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 1rem; 
+  margin-top: 1rem;
 }
 
 .payment-button:hover {
