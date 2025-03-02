@@ -12,7 +12,7 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 const sortOption = ref<SortOption>({ field: null, order: 'asc' });
 const fuelTypeFilter = ref<string | null>(null);
-const favoriteCars = ref<Car[]>([]); // Store favorite cars
+const favoriteCars = ref<Car[]>([]); 
 
 
 const loadCars = async () => {
@@ -65,7 +65,7 @@ const sortedCars = computed(() => {
   });
 });
 
-// Load favorites from localStorage
+
 onMounted(() => {
   loadCars();
   const storedFavorites = localStorage.getItem('favorites');
@@ -74,7 +74,7 @@ onMounted(() => {
   }
 });
 
-// Watch for changes and save to localStorage
+
 watch(favoriteCars, (newFavorites) => {
   localStorage.setItem('favorites', JSON.stringify(newFavorites));
 }, { deep: true });
@@ -82,9 +82,9 @@ watch(favoriteCars, (newFavorites) => {
 const toggleFavorite = (car: Car) => {
   const index = favoriteCars.value.findIndex(favCar => favCar.registration_number === car.registration_number);
   if (index === -1) {
-    favoriteCars.value.push(car); // Add to favorites
+    favoriteCars.value.push(car); 
   } else {
-    favoriteCars.value.splice(index, 1); // Remove from favorites
+    favoriteCars.value.splice(index, 1); 
   }
 };
 
@@ -98,7 +98,7 @@ const isFavorite = (car: Car) => {
     <h1>Car List</h1>
 
     <div>
-      <label id="fuel-filter-label" for="fuel-type-select">Filter by Fuel Type: </label>
+      <label id="fuel-filter-label" for="fuel-type-select">Filter by Fuel Type:</label>
       <select id="fuel-type-select" v-model="fuelTypeFilter">
         <option value="">All</option>
         <option value="petrol">Petrol</option>
@@ -109,7 +109,8 @@ const isFavorite = (car: Car) => {
 
     <div v-if="loading">Loading cars...</div>
     <div v-else-if="error">{{ error }}</div>
-    <div v-else class="table-container">  <table>
+    <div v-else class="table-container">
+      <table>
         <thead>
           <tr>
             <th>Car Name</th>
@@ -180,11 +181,11 @@ const isFavorite = (car: Car) => {
             <td>{{ car.wheel_plan }}</td>
             <td>{{ car.power_output }} HP</td>
             <td>£{{ car.price }}</td>
-             <td class = "button-cell">
-            <button @click="toggleFavorite(car)" class = "favorite-button">
-              {{ isFavorite(car) ? 'Remove from Favorites' : 'Add to Favorites' }}
-            </button>
-          </td>
+            <td class="button-cell">
+              <button @click="toggleFavorite(car)" class="favorite-button">
+                {{ isFavorite(car) ? 'Remove from Favorites' : 'Add to Favorites' }}
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -193,10 +194,9 @@ const isFavorite = (car: Car) => {
 </template>
 
 <style scoped>
-
 .table-container {
-  overflow-x: auto; 
-  width: 100%;     
+  overflow-x: auto;
+  width: 100%;
 }
 
 table {
@@ -210,23 +210,28 @@ th, td {
   border: 1px solid #ddd;
   padding: 8px;
   white-space: nowrap;
+  color: white; 
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #2c3e50; 
   text-align: left;
 }
 
 tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #099999; 
+}
+tr:nth-child(odd) {
+    background-color: #242424;
 }
 
 tr:hover {
-  background-color: #e9e9e9;
+  background-color: #ddd;
 }
 
 h1 {
   margin-bottom: 16px;
+    color: var(--text-color); 
 }
 
 .sort-header {
@@ -243,6 +248,6 @@ h1 {
     width: 180px;
 }
 .favorite-button{
-     width: 100%;
- }
+    width: 100%;
+}
 </style>

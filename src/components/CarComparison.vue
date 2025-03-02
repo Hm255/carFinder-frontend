@@ -147,7 +147,6 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
 </template>
 
 <style scoped>
-/* ... (Your styles remain the same) ... */
 .car-comparison {
   padding: 16px;
   display: flex;
@@ -167,6 +166,7 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
   flex-wrap: wrap;
   gap: 16px;
   justify-content: flex-start;
+  margin-bottom: 16px;
 }
 
 .car-card {
@@ -181,7 +181,7 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
 }
 
 .car-card.selected {
-  border-color: #F2BE00; /* Use CSS variable if defined */
+  border-color: var(--primary-yellow); 
   box-shadow: 0 0 10px rgba(242, 190, 0, 0.5);
 }
 
@@ -192,6 +192,7 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
 
 .car-card h2 {
   margin-top: 0;
+    color: var(--text-color); 
 }
 
 .car-card ul {
@@ -207,9 +208,9 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
   margin-top: 16px;
 }
 
+/* Table Styles */
 .comparison {
-  margin-top: 16px; /* Reduced margin, now that the h2 is separate */
-   /* flex: 1; add this to allow for comparison table expansion */
+  margin-top: 16px;
 }
 
 .comparison table {
@@ -221,19 +222,23 @@ const isSelectionLimitReached = computed(() => selectedCars.value.length >= 3);
 .comparison td {
   border: 1px solid #ddd;
   padding: 8px;
+  color: white; 
 }
 
 .comparison th {
-  background-color: #f2f2f2;
+  background-color: #2c3e50; 
   text-align: center;
 }
 
-.comparison td {
-  text-align: center;
-}
 
 .comparison tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #099999; 
 }
+.comparison tr:nth-child(odd) {
+   background-color: #000000;
+ }
 
+.comparison tr:hover{
+    background-color: #ddd;
+}
 </style>
