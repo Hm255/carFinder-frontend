@@ -102,9 +102,6 @@ const showNewAndLuxury = () => {
   router.push({ path: '/cars', query: { filter: 'luxury' } });
 };
 
-const clearFilters = () => {
-     router.push({path: '/cars'});
-}
 
 onMounted(loadCars);
 </script>
@@ -131,7 +128,6 @@ onMounted(loadCars);
     <div class="filter-buttons">
       <button @click="showNewAndAffordable" :class="{ active: activeFilter === 'affordable' }">New &amp; Affordable</button>
       <button @click="showNewAndLuxury" :class="{ active: activeFilter === 'luxury' }">Luxury</button>
-        <button @click="clearFilters" :class="{ active: activeFilter === null }">Clear Filters</button>
     </div>
 
     <div v-if="loading">Loading cars...</div>
