@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-import type { Car } from '../services/api'; // Import the Car type
+import type { Car } from '../services/api'; 
 
 const favoriteCars = ref<Car[]>([]);
 
-// Load favorites from localStorage on component mount
+
 onMounted(() => {
   const storedFavorites = localStorage.getItem('favorites');
   if (storedFavorites) {
@@ -12,10 +12,10 @@ onMounted(() => {
   }
 });
 
-// Watch for changes to favoriteCars and update localStorage
+
 watch(favoriteCars, (newFavorites) => {
   localStorage.setItem('favorites', JSON.stringify(newFavorites));
-}, { deep: true });  // Use deep: true to watch for changes within the array
+}, { deep: true });  
 
 const removeFromFavorites = (carToRemove: Car) => {
   favoriteCars.value = favoriteCars.value.filter(car => car.registration_number !== carToRemove.registration_number);
@@ -49,14 +49,13 @@ const removeFromFavorites = (carToRemove: Car) => {
 </template>
 
 <style scoped>
-/* Add styling for the car cards, matching your other components */
-/* Reuse the .car-card class from CarComparisonPage.vue if possible */
+
 .car-card {
   border: 1px solid #ddd;
   padding: 16px;
   width: 300px;
   box-sizing: border-box;
-  margin-bottom: 1rem; /* Add some spacing between cards */
+  margin-bottom: 1rem; 
 }
 
 .car-card h2 {

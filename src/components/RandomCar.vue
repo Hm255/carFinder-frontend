@@ -27,7 +27,7 @@ defineProps<{
 .car-card {
   border: 1px solid #ddd;
   padding: 16px;
-  width: 300px; /* Or whatever width you prefer */
+  width: 300px; 
   box-sizing: border-box;
   margin: 0 auto;
   margin-bottom: 1rem;
