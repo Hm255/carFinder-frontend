@@ -27,13 +27,24 @@ const goToCarInfo = (registrationNumber: string) => {
 
 const exportCar = (car: Car) => {
   const carData = generateCarData(car);
-  downloadData(carData, `<span class="math-inline">\{car\.make\}\_</span>{car.model}.txt`);
+  downloadData(carData, `favourite_car.txt`);
 };
 
 const exportAllCars = () => {
   const allCarsData = favoriteCars.value.map(car => generateCarData(car)).join('\n\n');
   downloadData(allCarsData, 'favorite_cars.txt');
 };
+
+const exportCarAsJSON = (car: Car) => {
+  const carData = generateCarData(car);
+  downloadData(carData, `favourite_car.json`);
+};
+
+const exportAllCarsAsJSON = () => {
+  const allCarsData = favoriteCars.value.map(car => generateCarData(car)).join('\n\n');
+  downloadData(allCarsData, 'favorite_cars.json');
+};
+
 
 const generateCarData = (car: Car): string => {
   return `
@@ -69,7 +80,8 @@ const downloadData = (data: string, filename: string) => {
       <p>You have no favorite cars yet.</p>
     </div>
     <div v-else>
-      <button @click="exportAllCars">Export All Cars</button> 
+      <button @click="exportAllCars">Export All Cars (.txt)</button> 
+      <button @click="exportAllCarsAsJSON">Export All Cars (.JSON)</button>
       <div v-for="car in favoriteCars" :key="car.registration_number" class="car-card" @click="goToCarInfo(car.registration_number)">
         <h2>{{ car.make }} {{ car.model }}</h2>
         <ul>
@@ -83,7 +95,8 @@ const downloadData = (data: string, filename: string) => {
           <li><strong>Price:</strong> £{{ car.price }}</li>
         </ul>
         <button @click.stop="removeFromFavorites(car)">Remove from Favorites</button>
-        <button @click.stop="exportCar(car)">Export Car</button>
+        <button @click.stop="exportCar(car)">Export Car (.txt)</button>
+        <button @click.stop="exportCarAsJSON(car)">Export Car (.JSON)</button>
       </div>
     </div>
   </div>
