@@ -5,10 +5,10 @@
         <router-link to="/">Home</router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/cars">Search</router-link>
+        <router-link to="/Cars">Search</router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/favourites">Favourites</router-link>
+        <router-link to="/Favourites">Favourites</router-link>
       </li>
     </ul>
   </nav>

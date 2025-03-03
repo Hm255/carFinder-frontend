@@ -162,7 +162,7 @@ const toggleFavorite = (car: Car) => {
   } else {
     favoriteCars.value.splice(index, 1);
   }
-};
+}; 
 
 const isFavorite = (car: Car) => {
   return favoriteCars.value.some(favCar => favCar.registration_number === car.registration_number)
@@ -275,7 +275,7 @@ const goToCarDetails = (car: Car) => {
                 {{ isFavorite(car) ? 'Remove from Favorites' : 'Add to Favorites' }}
               </button>
             </td>
-          </tr>
+          </tr> 
         </tbody>
       </table>
       <div v-if="!loading && sortedCars.length === 0">
