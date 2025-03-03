@@ -5,7 +5,7 @@ import { fetchCars, type Car } from '../services/api';
 
 const car = ref<Car | null>(null);
 const loading = ref(true);
-const error = ref<string | null>(null); // Keep for other errors
+const error = ref<string | null>(null); 
 const route = useRoute();
 const router = useRouter();
 
@@ -13,9 +13,9 @@ onMounted(async () => {
   try {
     const registrationNumber = route.params.registrationNumber as string;
     if (!registrationNumber) {
-      // Redirect to 404 if no registration number
+      
       router.push({ name: 'NotFound' });
-      return; // Stop execution here
+      return; 
     }
 
     const allCars = await fetchCars();
@@ -24,12 +24,12 @@ onMounted(async () => {
     if (foundCar) {
       car.value = foundCar;
     } else {
-      // Redirect to 404 if car not found
+      
       router.push({ name: 'NotFound' });
       return; // Stop execution
     }
   } catch (err: any) {
-    error.value = 'Failed to load car details.'; // Keep for other errors
+    error.value = 'Failed to load car details.'; 
     console.error('Error:', err);
   } finally {
     loading.value = false;
