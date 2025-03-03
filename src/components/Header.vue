@@ -5,7 +5,7 @@
         <router-link to="/">Home</router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/Cars">Search</router-link>
+        <router-link to="/cars">Search</router-link>
       </li>
       <li class="nav-item">
         <router-link to="/Favourites">Favourites</router-link>

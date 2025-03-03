@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     component: HomePage,
   },
   {
-    path: '/Cars',
+    path: '/cars',
     name: 'CarList',
     component: CarList,
   },
@@ -29,17 +29,17 @@ const routes: Array<RouteRecordRaw> = [
     component: Favourites,
   },
   {
-    path: '/Cars/:registrationNumber',
+    path: '/cars/:registrationNumber',
     name: 'CarInfo',
     component: CarInfo,
   },
   {
-    path: '/Cars/:registrationNumber/payment',
+    path: '/cars/:registrationNumber/payment',
     name: 'Payment',
     component: Payment,
   },
   {
-    path: '/Cars/:registrationNumber/payment/PaymentComplete', 
+    path: '/cars/:registrationNumber/payment/PaymentComplete', 
     name: 'PaymentComplete',
     component: PaymentComplete,
   },

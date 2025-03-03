@@ -58,7 +58,7 @@ const randomiseCar = () => {
 const searchCars = () => {
     if(searchQuery.value.trim() !== ''){
         router.push({
-            path: '/Cars',
+            path: '/cars',
             query: { search: searchQuery.value.trim()}
         });
     }
@@ -94,12 +94,12 @@ console.log(LuxuryCars)
 
 const showNewAndAffordable = () => {
   activeFilter.value = 'affordable'; 
-  router.push({ path: '/Cars', query: { filter: 'affordable' } });
+  router.push({ path: '/cars', query: { filter: 'affordable' } });
 };
 
 const showNewAndLuxury = () => {
   activeFilter.value = 'luxury'; 
-  router.push({ path: '/Cars', query: { filter: 'luxury' } });
+  router.push({ path: '/cars', query: { filter: 'luxury' } });
 };
 
 

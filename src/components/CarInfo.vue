@@ -26,7 +26,7 @@ onMounted(async () => {
     } else {
       
       router.push({ name: 'NotFound' });
-      return; // Stop execution
+      return; 
     }
   } catch (err: any) {
     error.value = 'Failed to load car details.'; 

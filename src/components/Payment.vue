@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
-import { fetchCars, type Car } from '../services/api'; // Import fetchCars and Car type
+import { fetchCars, type Car } from '../services/api'; 
 
 const route = useRoute();
 const router = useRouter();
