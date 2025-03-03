@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import type { Car } from '../services/api';
-import { useRouter } from 'vue-router'; 
+import { useRouter } from 'vue-router';
 
 const favoriteCars = ref<Car[]>([]);
-const router = useRouter(); 
+const router = useRouter();
 
 onMounted(() => {
   const storedFavorites = localStorage.getItem('favorites');
@@ -25,6 +25,41 @@ const goToCarInfo = (registrationNumber: string) => {
   router.push({ name: 'CarInfo', params: { registrationNumber } });
 };
 
+const exportCar = (car: Car) => {
+  const carData = generateCarData(car);
+  downloadData(carData, `<span class="math-inline">\{car\.make\}\_</span>{car.model}.txt`);
+};
+
+const exportAllCars = () => {
+  const allCarsData = favoriteCars.value.map(car => generateCarData(car)).join('\n\n');
+  downloadData(allCarsData, 'favorite_cars.txt');
+};
+
+const generateCarData = (car: Car): string => {
+  return `
+    Make: ${car.make}
+    Model: ${car.model}
+    Color: ${car.color}
+    Engine Size: ${car.engine_size} cc
+    Year of Manufacture: ${car.year_of_manufacture}
+    CO₂ Emissions: ${car.co2_emissions} g/km
+    Fuel Type: ${car.fuel_type}
+    Wheel Plan: ${car.wheel_plan}
+    Power Output: <span class="math-inline">\{car\.power\_output\} HP
+Price\: £</span>{car.price}
+  `;
+};
+
+const downloadData = (data: string, filename: string) => {
+  const element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+  element.setAttribute('download', filename);
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+};
+
 </script>
 
 <template>
@@ -34,8 +69,9 @@ const goToCarInfo = (registrationNumber: string) => {
       <p>You have no favorite cars yet.</p>
     </div>
     <div v-else>
+      <button @click="exportAllCars">Export All Cars</button> 
       <div v-for="car in favoriteCars" :key="car.registration_number" class="car-card" @click="goToCarInfo(car.registration_number)">
-          <h2>{{ car.make }} {{ car.model }}</h2>
+        <h2>{{ car.make }} {{ car.model }}</h2>
         <ul>
           <li><strong>Color:</strong> {{ car.color }}</li>
           <li><strong>Engine Size:</strong> {{ car.engine_size }} cc</li>
@@ -46,7 +82,8 @@ const goToCarInfo = (registrationNumber: string) => {
           <li><strong>Power Output:</strong> {{ car.power_output }} HP</li>
           <li><strong>Price:</strong> £{{ car.price }}</li>
         </ul>
-          <button @click.stop="removeFromFavorites(car)">Remove from Favorites</button>
+        <button @click.stop="removeFromFavorites(car)">Remove from Favorites</button>
+        <button @click.stop="exportCar(car)">Export Car</button>
       </div>
     </div>
   </div>
@@ -59,7 +96,7 @@ const goToCarInfo = (registrationNumber: string) => {
   width: 300px;
   box-sizing: border-box;
   margin-bottom: 1rem;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .car-card h2 {
@@ -75,13 +112,39 @@ const goToCarInfo = (registrationNumber: string) => {
   margin-bottom: 8px;
 }
 
-.main-content {
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-  gap: 1rem; 
-  padding: 1rem;
-  justify-items: center; 
-  align-content: start; 
+.car-card button {
+  margin-top: 10px; 
+  margin-right: 5px; 
+  padding: 8px 12px; 
+  background-color: #f0f0f0; 
+  border: 1px solid #ccc; 
+  cursor: pointer;
+}
 
+.car-card button:hover {
+  background-color: #e0e0e0; 
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  justify-items: center;
+  align-content: start;
+}
+
+
+button {
+  margin-bottom: 10px; 
+  padding: 8px 12px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #e0e0e0;
 }
 </style>
