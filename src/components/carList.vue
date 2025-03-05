@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue';
-import { fetchCars, type Car } from '../services/api.ts'
+import { fetchCars, type Car } from '../services/api.ts';
 import { useRouter, useRoute } from 'vue-router';
 
 interface SortOption {
@@ -8,28 +8,27 @@ interface SortOption {
   order: 'asc' | 'desc';
 }
 
-
 const wheelPlans = [
-    { wheel_plan_id: 1, wheel_plan_name: '2 WHEEL' },
-    { wheel_plan_id: 2, wheel_plan_name: '3 WHEEL' },
-    { wheel_plan_id: 3, wheel_plan_name: '2 AXLE RIGID BODY' },
-    { wheel_plan_id: 4, wheel_plan_name: '3 AXLE RIGID BODY' },
-    { wheel_plan_id: 5, wheel_plan_name: '4 AXLE RIGID BODY' },
-    { wheel_plan_id: 6, wheel_plan_name: '2 AXLE ARTICULATED' },
-    { wheel_plan_id: 7, wheel_plan_name: '3 AXLE ARTICULATED' },
-    { wheel_plan_id: 8, wheel_plan_name: '4 AXLE ARTICULATED' },
-    { wheel_plan_id: 9, wheel_plan_name: '3 WHEEL DRIVE' },
-    { wheel_plan_id: 10, wheel_plan_name: '4 WHEEL DRIVE' },
-    { wheel_plan_id: 11, wheel_plan_name: 'ALL WHEEL DRIVE' },
-    { wheel_plan_id: 12, wheel_plan_name: '6 WHEEL' },
-    { wheel_plan_id: 13, wheel_plan_name: '6 WHEEL DRAWBAR' },
-    { wheel_plan_id: 14, wheel_plan_name: '8 WHEEL RIGID BODY' },
-    { wheel_plan_id: 15, wheel_plan_name: 'LEFT-HAND DRIVE' },
-    { wheel_plan_id: 16, wheel_plan_name: 'QUADRICYCLE' },
-    { wheel_plan_id: 17, wheel_plan_name: 'TRAILER' },
-    { wheel_plan_id: 18, wheel_plan_name: 'SEMI-TRAILER' },
-    { wheel_plan_id: 19, wheel_plan_name: 'TRACTOR UNIT' },
-    { wheel_plan_id: 20, wheel_plan_name: 'OTHER' }
+  { wheel_plan_id: 1, wheel_plan_name: '2 WHEEL' },
+  { wheel_plan_id: 2, wheel_plan_name: '3 WHEEL' },
+  { wheel_plan_id: 3, wheel_plan_name: '2 AXLE RIGID BODY' },
+  { wheel_plan_id: 4, wheel_plan_name: '3 AXLE RIGID BODY' },
+  { wheel_plan_id: 5, wheel_plan_name: '4 AXLE RIGID BODY' },
+  { wheel_plan_id: 6, wheel_plan_name: '2 AXLE ARTICULATED' },
+  { wheel_plan_id: 7, wheel_plan_name: '3 AXLE ARTICULATED' },
+  { wheel_plan_id: 8, wheel_plan_name: '4 AXLE ARTICULATED' },
+  { wheel_plan_id: 9, wheel_plan_name: '3 WHEEL DRIVE' },
+  { wheel_plan_id: 10, wheel_plan_name: '4 WHEEL DRIVE' },
+  { wheel_plan_id: 11, wheel_plan_name: 'ALL WHEEL DRIVE' },
+  { wheel_plan_id: 12, wheel_plan_name: '6 WHEEL' },
+  { wheel_plan_id: 13, wheel_plan_name: '6 WHEEL DRAWBAR' },
+  { wheel_plan_id: 14, wheel_plan_name: '8 WHEEL RIGID BODY' },
+  { wheel_plan_id: 15, wheel_plan_name: 'LEFT-HAND DRIVE' },
+  { wheel_plan_id: 16, wheel_plan_name: 'QUADRICYCLE' },
+  { wheel_plan_id: 17, wheel_plan_name: 'TRAILER' },
+  { wheel_plan_id: 18, wheel_plan_name: 'SEMI-TRAILER' },
+  { wheel_plan_id: 19, wheel_plan_name: 'TRACTOR UNIT' },
+  { wheel_plan_id: 20, wheel_plan_name: 'OTHER' }
 ];
 
 const cars = ref<Car[]>([]);
@@ -37,7 +36,7 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 const sortOption = ref<SortOption>({ field: null, order: 'asc' });
 const fuelTypeFilter = ref<string | null>(null);
-const wheelPlanFilter = ref<string | null>(null); 
+const wheelPlanFilter = ref<string | null>(null);
 const favouriteCars = ref<Car[]>([]);
 const router = useRouter();
 const route = useRoute();
@@ -63,28 +62,25 @@ const sortCars = (field: keyof Car) => {
 };
 
 const searchQuery = computed(() => {
-  return route.query.search as string || '';
+  return (route.query.search as string) || '';
 });
 
 watch(searchQuery, () => {
-    fuelTypeFilter.value = null;
-    wheelPlanFilter.value = null;
-})
+  fuelTypeFilter.value = null;
+  wheelPlanFilter.value = null;
+});
 
 const filteredCars = computed(() => {
   let filtered = cars.value;
-
- 
   if (fuelTypeFilter.value) {
-    filtered = filtered.filter(car => car.fuel_type.toLowerCase() === fuelTypeFilter.value!.toLowerCase());
+    filtered = filtered.filter(car =>
+      car.fuel_type.toLowerCase() === fuelTypeFilter.value!.toLowerCase()
+    );
   }
 
-  
   if (wheelPlanFilter.value) {
     filtered = filtered.filter(car => car.wheel_plan === wheelPlanFilter.value);
   }
-
-  
   const query = searchQuery.value.toLowerCase().trim();
   if (query) {
     filtered = filtered.filter(car => {
@@ -97,45 +93,38 @@ const filteredCars = computed(() => {
       );
     });
   }
-      
-    const filterQuery = route.query.filter as string | undefined;
-    if(filterQuery === 'affordable'){
-        return [...filtered]
-            .sort((a, b) => {
-                if (a.year_of_manufacture !== b.year_of_manufacture) {
-                    return b.year_of_manufacture - a.year_of_manufacture;
-                }
-                return a.price - b.price;
-            });
-    } else if(filterQuery === 'luxury'){
-        return [...filtered]
-        .sort((a, b) => {
-            if (a.year_of_manufacture !== b.year_of_manufacture) {
-                return b.year_of_manufacture - a.year_of_manufacture;
-            }
-        return b.price - a.price;
-        });
-    }
 
+
+  const filterQuery = route.query.filter as string | undefined;
+  if (filterQuery === 'affordable') {
+    filtered = filtered.filter(car => car.price <= 20000);
+    return [...filtered].sort((a, b) => {
+      if (a.year_of_manufacture !== b.year_of_manufacture) {
+        return b.year_of_manufacture - a.year_of_manufacture;
+      }
+      return a.price - b.price;
+    });
+  } else if (filterQuery === 'luxury') {
+    
+    return [...filtered].sort((a, b) => {
+      if (a.year_of_manufacture !== b.year_of_manufacture) {
+        return b.year_of_manufacture - a.year_of_manufacture;
+      }
+      return b.price - a.price;
+    });
+  }
   return filtered;
 });
 
 const sortedCars = computed(() => {
   let carsToSort = filteredCars.value;
-
   if (!sortOption.value.field) {
     return carsToSort;
   }
-
   const { field, order } = sortOption.value;
-  if (!field) {
-    return carsToSort;
-  }
-
   return [...carsToSort].sort((a, b) => {
-    const aVal = a[field];
-    const bVal = b[field];
-
+    const aVal = a[field] as number;
+    const bVal = b[field] as number;
     if (typeof aVal === 'number' && typeof bVal === 'number') {
       return order === 'asc' ? aVal - bVal : bVal - aVal;
     }
@@ -145,14 +134,14 @@ const sortedCars = computed(() => {
 
 onMounted(() => {
   loadCars();
-  const storedfavourites = localStorage.getItem('favourites');
-  if (storedfavourites) {
-    favouriteCars.value = JSON.parse(storedfavourites);
+  const storedFavourites = localStorage.getItem('favourites');
+  if (storedFavourites) {
+    favouriteCars.value = JSON.parse(storedFavourites);
   }
 });
 
-watch(favouriteCars, (newfavourites) => {
-  localStorage.setItem('favourites', JSON.stringify(newfavourites));
+watch(favouriteCars, (newFavourites) => {
+  localStorage.setItem('favourites', JSON.stringify(newFavourites));
 }, { deep: true });
 
 const togglefavourite = (car: Car) => {
@@ -162,16 +151,15 @@ const togglefavourite = (car: Car) => {
   } else {
     favouriteCars.value.splice(index, 1);
   }
-}; 
+};
 
 const isfavourite = (car: Car) => {
-  return favouriteCars.value.some(favCar => favCar.registration_number === car.registration_number)
-}
+  return favouriteCars.value.some(favCar => favCar.registration_number === car.registration_number);
+};
 
 const goToCarDetails = (car: Car) => {
   router.push({ name: 'CarInfo', params: { registrationNumber: car.registration_number } });
 };
-
 </script>
 
 <template>
@@ -179,7 +167,7 @@ const goToCarDetails = (car: Car) => {
     <h1>Car List</h1>
 
     <div class="filter-container">
-      <label id="fuel-filter-label" for="fuel-type-select">Filter by Fuel Type: </label>
+      <label for="fuel-type-select">Filter by Fuel Type: </label>
       <select id="fuel-type-select" v-model="fuelTypeFilter">
         <option value="">All</option>
         <option value="petrol">Petrol</option>
@@ -187,7 +175,7 @@ const goToCarDetails = (car: Car) => {
         <option value="electricity">Electric</option>
       </select>
 
-      <label id="wheel-plan-label" for="wheel-plan-select">Filter by Wheel Plan: </label>
+      <label for="wheel-plan-select">Filter by Wheel Plan: </label>
       <select id="wheel-plan-select" v-model="wheelPlanFilter">
         <option value="">All</option>
         <option v-for="plan in wheelPlans" :key="plan.wheel_plan_id" :value="plan.wheel_plan_name">
@@ -207,7 +195,7 @@ const goToCarDetails = (car: Car) => {
             <th>
               <div class="sort-header">
                 Engine Size
-                <select @change="sortCars('engine_size')">
+                <select @change="sortCars('engine_size')" >
                   <option value="" disabled selected>Sort</option>
                   <option value="asc">Ascending</option>
                   <option value="desc">Descending</option>
@@ -275,7 +263,7 @@ const goToCarDetails = (car: Car) => {
                 {{ isfavourite(car) ? 'Remove from favourites' : 'Add to favourites' }}
               </button>
             </td>
-          </tr> 
+          </tr>
         </tbody>
       </table>
       <div v-if="!loading && sortedCars.length === 0">
@@ -286,8 +274,6 @@ const goToCarDetails = (car: Car) => {
 </template>
 
 <style scoped>
-
-
 .table-container {
   overflow-x: auto;
   width: 100%;

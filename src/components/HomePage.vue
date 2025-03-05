@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { fetchCars, type Car } from '../services/api.ts';
+import { fetchCars, type Car } from '../services/api';
 import RandomCar from '../components/RandomCar.vue';
 import { useRouter } from 'vue-router';
 
@@ -10,7 +10,7 @@ const cars = ref<Car[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const router = useRouter();
-const activeFilter = ref<string | null>(null); 
+const activeFilter = ref<string | null>(null);
 
 const loadCars = async () => {
   try {
@@ -28,7 +28,6 @@ const filteredCars = computed(() => {
   if (!query) {
     return cars.value;
   }
-
   return cars.value.filter(car => {
     return (
       car.make.toLowerCase().includes(query) ||
@@ -41,67 +40,68 @@ const filteredCars = computed(() => {
 });
 
 const handleSearchKeyPress = (event: KeyboardEvent) => {
-    if(event.key === 'Enter'){
-        searchCars();
-    }
-}
+  if (event.key === 'Enter') {
+    searchCars();
+  }
+};
 
 const randomiseCar = () => {
-    if (filteredCars.value.length > 0) {
-        const randomIndex = Math.floor(Math.random() * filteredCars.value.length);
-        randomCar.value = filteredCars.value[randomIndex];
-    } else {
-        randomCar.value = null;
-    }
+  if (filteredCars.value.length > 0) {
+    const randomIndex = Math.floor(Math.random() * filteredCars.value.length);
+    randomCar.value = filteredCars.value[randomIndex];
+  } else {
+    randomCar.value = null;
+  }
 };
 
 const searchCars = () => {
-    if(searchQuery.value.trim() !== ''){
-        router.push({
-            path: '/cars',
-            query: { search: searchQuery.value.trim()}
-        });
-    }
-}
+  if (searchQuery.value.trim() !== '') {
+    router.push({
+      path: '/cars',
+      query: { search: searchQuery.value.trim() }
+    });
+  }
+};
 
-
+/*
+  newAndAffordableCars:
+  • Returns only those cars whose price is less than or equal to £20,000.
+  • Orders them first by year_of_manufacture in descending order (newest first)
+    and then, within the same year, orders them in ascending order by price.
+*/
 const newAndAffordableCars = computed(() => {
-  if (!cars.value.length) return []; 
-  return [...cars.value] 
+  if (!cars.value.length) return [];
+  return cars.value
+    .filter(car => car.price <= 20000)
     .sort((a, b) => {
       if (a.year_of_manufacture !== b.year_of_manufacture) {
         return b.year_of_manufacture - a.year_of_manufacture;
       }
-      
       return a.price - b.price;
     });
 });
-console.log(newAndAffordableCars)
+console.log(newAndAffordableCars);
 
 const LuxuryCars = computed(() => {
   if (!cars.value.length) return [];
-  return [...cars.value]
-    .sort((a, b) => {
-      
-      if (a.year_of_manufacture !== b.year_of_manufacture) {
-        return b.year_of_manufacture - a.year_of_manufacture;
-      }
-     
-      return b.price - a.price;
-    });
+  return [...cars.value].sort((a, b) => {
+    if (a.year_of_manufacture !== b.year_of_manufacture) {
+      return b.year_of_manufacture - a.year_of_manufacture;
+    }
+    return b.price - a.price;
+  });
 });
-console.log(LuxuryCars)
+console.log(LuxuryCars);
 
 const showNewAndAffordable = () => {
-  activeFilter.value = 'affordable'; 
+  activeFilter.value = 'affordable';
   router.push({ path: '/cars', query: { filter: 'affordable' } });
 };
 
 const showNewAndLuxury = () => {
-  activeFilter.value = 'luxury'; 
+  activeFilter.value = 'luxury';
   router.push({ path: '/cars', query: { filter: 'luxury' } });
 };
-
 
 onMounted(loadCars);
 </script>
@@ -117,7 +117,7 @@ onMounted(loadCars);
         placeholder="Search for cars..."
         @keypress.enter="handleSearchKeyPress"
       />
-        <button @click="searchCars">Search</button>
+      <button @click="searchCars">Search</button>
     </div>
 
     <div class="buttons">
@@ -126,14 +126,18 @@ onMounted(loadCars);
     </div>
 
     <div class="filter-buttons">
-      <button @click="showNewAndAffordable" :class="{ active: activeFilter === 'affordable' }">New &amp; Affordable</button>
-      <button @click="showNewAndLuxury" :class="{ active: activeFilter === 'luxury' }">Luxury</button>
+      <button @click="showNewAndAffordable" :class="{ active: activeFilter === 'affordable' }">
+        New &amp; Affordable
+      </button>
+      <button @click="showNewAndLuxury" :class="{ active: activeFilter === 'luxury' }">
+        Luxury
+      </button>
     </div>
 
     <div v-if="loading">Loading cars...</div>
     <div v-else-if="error">{{ error }}</div>
     <RandomCar v-if="randomCar" :car="randomCar" />
-     <div v-if="!loading && filteredCars.length === 0 && searchQuery.trim() !== ''">
+    <div v-if="!loading && filteredCars.length === 0 && searchQuery.trim() !== ''">
       No cars found matching your search.
     </div>
   </div>
@@ -155,15 +159,14 @@ onMounted(loadCars);
 h1 {
   font-size: 3rem;
   margin-bottom: 1.5rem;
-    color: var(--text-color);
+  color: var(--text-color);
 }
 
-
 .search-group {
-  display: flex;        
-  align-items: center;  
-  gap: 1rem;           
-  margin-bottom: 1rem; 
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
   width: 60%;
   max-width: 800px;
 }
@@ -173,14 +176,14 @@ input[type="text"] {
   font-size: 1.2rem;
   border: none;
   border-radius: 8px;
-    flex: 1; 
+  flex: 1;
 }
 
 .buttons {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 button {
@@ -197,23 +200,11 @@ button:hover {
   background-color: #e0ac00;
 }
 
-.Link {
-text-decoration: none;
-color: inherit;
-
-}
-
-.Link:hover {
-text-decoration: underline;
-color: blue;
-}
-
-
 .filter-buttons {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
 }
 
 .active {
