@@ -133,6 +133,7 @@ const sortedCars = computed(() => {
 });
 
 onMounted(() => {
+  console.log('mounted')
   loadCars();
   const storedFavourites = localStorage.getItem('favourites');
   if (storedFavourites) {
