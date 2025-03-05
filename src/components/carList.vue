@@ -38,7 +38,7 @@ const error = ref<string | null>(null);
 const sortOption = ref<SortOption>({ field: null, order: 'asc' });
 const fuelTypeFilter = ref<string | null>(null);
 const wheelPlanFilter = ref<string | null>(null); 
-const favoriteCars = ref<Car[]>([]);
+const favouriteCars = ref<Car[]>([]);
 const router = useRouter();
 const route = useRoute();
 
@@ -145,27 +145,27 @@ const sortedCars = computed(() => {
 
 onMounted(() => {
   loadCars();
-  const storedFavorites = localStorage.getItem('favorites');
-  if (storedFavorites) {
-    favoriteCars.value = JSON.parse(storedFavorites);
+  const storedfavourites = localStorage.getItem('favourites');
+  if (storedfavourites) {
+    favouriteCars.value = JSON.parse(storedfavourites);
   }
 });
 
-watch(favoriteCars, (newFavorites) => {
-  localStorage.setItem('favorites', JSON.stringify(newFavorites));
+watch(favouriteCars, (newfavourites) => {
+  localStorage.setItem('favourites', JSON.stringify(newfavourites));
 }, { deep: true });
 
-const toggleFavorite = (car: Car) => {
-  const index = favoriteCars.value.findIndex(favCar => favCar.registration_number === car.registration_number);
+const togglefavourite = (car: Car) => {
+  const index = favouriteCars.value.findIndex(favCar => favCar.registration_number === car.registration_number);
   if (index === -1) {
-    favoriteCars.value.push(car);
+    favouriteCars.value.push(car);
   } else {
-    favoriteCars.value.splice(index, 1);
+    favouriteCars.value.splice(index, 1);
   }
 }; 
 
-const isFavorite = (car: Car) => {
-  return favoriteCars.value.some(favCar => favCar.registration_number === car.registration_number)
+const isfavourite = (car: Car) => {
+  return favouriteCars.value.some(favCar => favCar.registration_number === car.registration_number)
 }
 
 const goToCarDetails = (car: Car) => {
@@ -271,8 +271,8 @@ const goToCarDetails = (car: Car) => {
             <td>{{ car.power_output }} HP</td>
             <td>£{{ car.price }}</td>
             <td class="button-cell">
-              <button @click.stop="toggleFavorite(car)" class="favorite-button">
-                {{ isFavorite(car) ? 'Remove from Favorites' : 'Add to Favorites' }}
+              <button @click.stop="togglefavourite(car)" class="favourite-button">
+                {{ isfavourite(car) ? 'Remove from favourites' : 'Add to favourites' }}
               </button>
             </td>
           </tr> 
@@ -338,7 +338,7 @@ h1 {
 .button-cell {
     width: 180px;
 }
-.favorite-button{
+.favourite-button{
     width: 100%;
 }
 
