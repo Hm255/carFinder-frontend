@@ -63,12 +63,6 @@ const searchCars = () => {
   }
 };
 
-/*
-  newAndAffordableCars:
-  • Returns only those cars whose price is less than or equal to £20,000.
-  • Orders them first by year_of_manufacture in descending order (newest first)
-    and then, within the same year, orders them in ascending order by price.
-*/
 const newAndAffordableCars = computed(() => {
   if (!cars.value.length) return [];
   return cars.value
