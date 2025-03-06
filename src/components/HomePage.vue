@@ -131,13 +131,13 @@ onMounted(loadCars);
 
     <div v-if="loading">Loading cars...</div>
     <div v-else-if="error">{{ error }}</div>
-    <RandomCar v-if="randomCar" :car="randomCar" />
+    <div v-if="searchQuery.length === 0">
+      Type before pressing search
+    </div>
     <div v-if="!loading && filteredCars.length === 0 && searchQuery.trim() !== ''">
       No cars found matching your search.
     </div>
-    <div v-else="searchQuery === ''">
-      Empty searches not possible
-    </div>
+    <RandomCar v-if="randomCar" :car="randomCar" />
   </div>
 </template>
 
