@@ -61,6 +61,7 @@ const searchCars = () => {
       query: { search: searchQuery.value.trim() }
     });
   }
+
 };
 
 const newAndAffordableCars = computed(() => {
@@ -133,6 +134,9 @@ onMounted(loadCars);
     <RandomCar v-if="randomCar" :car="randomCar" />
     <div v-if="!loading && filteredCars.length === 0 && searchQuery.trim() !== ''">
       No cars found matching your search.
+    </div>
+    <div v-else="searchQuery === ''">
+      Empty searches not possible
     </div>
   </div>
 </template>
