@@ -9,7 +9,7 @@ function resetError() {
 
 
 onErrorCaptured((err, instance, info) => {
-  console.error("Error captured in boundary:", err, info);
+  console.error("Error captured in boundary:", err, info, instance);
   error.value = err;
   return false;
 });
@@ -28,8 +28,6 @@ onErrorCaptured((err, instance, info) => {
       </div>
     </div>
   </template>
-  
-
   
   <style scoped>
   .error-boundary {
