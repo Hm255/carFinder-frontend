@@ -61,7 +61,6 @@ const searchCars = () => {
       query: { search: searchQuery.value.trim() }
     });
   }
-
 };
 
 const newAndAffordableCars = computed(() => {
@@ -104,7 +103,6 @@ onMounted(loadCars);
 <template>
   <div class="main-content">
     <h1>CarFinder</h1>
-
     <div class="search-group">
       <input
         type="text"
@@ -114,12 +112,10 @@ onMounted(loadCars);
       />
       <button @click="searchCars">Search</button>
     </div>
-
     <div class="buttons">
       <button @click="() => router.push('/ComparisonPage')">Compare</button>
       <button @click="randomiseCar">Randomiser</button>
     </div>
-
     <div class="filter-buttons">
       <button @click="showNewAndAffordable" :class="{ active: activeFilter === 'affordable' }">
         New &amp; Affordable
@@ -128,7 +124,6 @@ onMounted(loadCars);
         Luxury
       </button>
     </div>
-
     <div v-if="loading">Loading cars...</div>
     <div v-else-if="error">{{ error }}</div>
     <div v-if="searchQuery.length === 0">
@@ -153,13 +148,11 @@ onMounted(loadCars);
   flex-direction: column;
   align-items: center;
 }
-
 h1 {
   font-size: 3rem;
   margin-bottom: 1.5rem;
   color: var(--text-color);
 }
-
 .search-group {
   display: flex;
   align-items: center;
@@ -168,7 +161,6 @@ h1 {
   width: 60%;
   max-width: 800px;
 }
-
 input[type="text"] {
   padding: 0.75rem;
   font-size: 1.2rem;
@@ -176,14 +168,12 @@ input[type="text"] {
   border-radius: 8px;
   flex: 1;
 }
-
 .buttons {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
   margin-bottom: 1rem;
 }
-
 button {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -193,22 +183,18 @@ button {
   cursor: pointer;
   transition: background-color 0.3s;
 }
-
 button:hover {
   background-color: #e0ac00;
 }
-
 .filter-buttons {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin-bottom: 1rem;
 }
-
 .active {
   background-color: #e0ac00;
 }
-
 .main-content > div {
   width: 100%;
 }

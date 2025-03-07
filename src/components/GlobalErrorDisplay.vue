@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onErrorCaptured, defineProps, onMounted } from 'vue'
+import { ref, computed, onErrorCaptured, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 
@@ -10,7 +10,7 @@ interface BackendError extends Error {
   }
 }
 
-const { notFound } = defineProps<{ notFound?: boolean }>()
+const props = defineProps<{ notFound?: boolean }>()
 const error = ref<Error | null>(null)
 
 function tryAgain() {
@@ -34,7 +34,7 @@ axios.interceptors.response.use(
 
 const route = useRoute()
 onMounted(() => {
-  if (notFound || route.name === 'NotFound') {
+  if (props.notFound || route.name === 'NotFound') {
     error.value = new Error("404 - Not Found: The page you're looking for doesn't exist.")
   }
 })
