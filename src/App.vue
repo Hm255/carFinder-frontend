@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import ErrorBoundary from './components/ErrorBoundary.vue';
 import GlobalErrorDisplay from './components/GlobalErrorDisplay.vue';
 import Header from './components/Header.vue';
 
