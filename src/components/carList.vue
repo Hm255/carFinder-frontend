@@ -174,6 +174,7 @@ const goToCarDetails = (car: Car) => {
         <option value="petrol">Petrol</option>
         <option value="diesel">Diesel</option>
         <option value="electricity">Electric</option>
+        <option value="hybrid">Hybrid</option>
       </select>
 
       <label for="wheel-plan-select">Filter by Wheel Plan: </label>

@@ -106,62 +106,65 @@ const downloadData = (data: string, filename: string) => {
 
 
 const exportSelectedCarsAsCSV = () => {
-  const carsToExport = favouriteCars.value.filter((_, index) => selectedCars.value[index]);
-  const header = [
-    'Registration Number',
-    'Make',
-    'Model',
-    'Color',
-    'Engine Size',
-    'Year of Manufacture',
-    'Date of Manufacture',
-    'CO2 Emissions',
-    'Tax Due Date',
-    'Date of Last V5C Issued',
-    'First Used Date',
-    'Marked for Export',
-    'Outstanding Recall',
-    'Type Approval',
-    'Power Output',
-    'Tax Status',
-    'Price',
-    'Fuel Type',
-    'Wheel Plan'
-  ].join(',');
-  const selectedCarsData = carsToExport.map(generateCarCSVRow).join('\n');
-  downloadData(header + '\n' + selectedCarsData, 'selected_favourite_cars.csv');
+ const carsToExport = favouriteCars.value.filter((_, index) => selectedCars.value[index]);
+    if(carsToExport.length === 0) return;
+ const header = [
+  'Registration Number',
+  'Make',
+  'Model',
+  'Color',
+  'Engine Size',
+  'Year of Manufacture',
+  'Date of Manufacture',
+  'CO2 Emissions',
+  'Tax Due Date',
+  'Date of Last V5C Issued',
+  'First Used Date',
+  'Marked for Export',
+  'Outstanding Recall',
+  'Type Approval',
+  'Power Output',
+  'Tax Status',
+  'Price',
+  'Fuel Type',
+  'Wheel Plan'
+ ].join(',');
+ const selectedCarsData = carsToExport.map(generateCarCSVRow).join('\n');
+ downloadData(header + '\n' + selectedCarsData, 'selected_favourite_cars.csv');
 };
 
 const exportSelectedCarsAsTXT = () => {
-  const carsToExport = favouriteCars.value.filter((_, index) => selectedCars.value[index]);
-  const selectedCarsData = carsToExport.map(generateCarData).join('\n\n');
-  downloadData(selectedCarsData, 'selected_favourite_cars.txt');
+ const carsToExport = favouriteCars.value.filter((_, index) => selectedCars.value[index]);
+    if(carsToExport.length === 0) return;
+ const selectedCarsData = carsToExport.map(generateCarData).join('\n\n');
+ downloadData(selectedCarsData, 'selected_favourite_cars.txt');
 };
 
 const exportSelectedCarsAsJSON = () => {
-  const carsToExport = favouriteCars.value.filter((_, index) => selectedCars.value[index]);
-  const selectedCarsData = carsToExport.map(car => ({
-    "Registration Number": car.registration_number,
-    "Make": car.make,
-    "Model": car.model,
-    "Color": car.color,
-    "Engine Size": car.engine_size,
-    "Year of Manufacture": car.year_of_manufacture,
-    "Date of Manufacture": formatDate(car.date_of_manufacture),
-    "CO2 Emissions": car.co2_emissions,
-    "Tax Due Date": formatDate(car.tax_due_date),
-    "Date of Last V5C Issued": formatDate(car.date_of_last_v5c_issued),
-    "First Used Date": formatDate(car.first_used_date),
-    "Marked for Export": car.marked_for_export ? 'Yes' : 'No',
-    "Outstanding Recall": car.has_outstanding_recall ? 'Yes' : 'No',
-    "Type Approval": car.type_approval,
-    "Power Output": car.power_output,
-    "Tax Status": car.tax_status,
-    "Price": car.price,
-    "Fuel Type": car.fuel_type,
-    "Wheel Plan": car.wheel_plan
-  }));
-  downloadData(JSON.stringify(selectedCarsData, null, 2), 'selected_favourite_cars.json');
+ const carsToExport = favouriteCars.value.filter((_, index) => selectedCars.value[index]);
+    if(carsToExport.length === 0) return;
+ const selectedCarsData = carsToExport.map(car => ({
+  "Registration Number": car.registration_number,
+  "Make": car.make,
+  "Model": car.model,
+  "Color": car.color,
+  "Engine Size": car.engine_size,
+  "Year of Manufacture": car.year_of_manufacture,
+  "Date of Manufacture": formatDate(car.date_of_manufacture),
+  "CO2 Emissions": car.co2_emissions,
+  "Tax Due Date": formatDate(car.tax_due_date),
+  "Date of Last V5C Issued": formatDate(car.date_of_last_v5c_issued),
+  "First Used Date": formatDate(car.first_used_date),
+  "Marked for Export": car.marked_for_export ? 'Yes' : 'No',
+  "Outstanding Recall": car.has_outstanding_recall ? 'Yes' : 'No',
+  "Type Approval": car.type_approval,
+  "Power Output": car.power_output,
+  "Tax Status": car.tax_status,
+  "Price": car.price,
+  "Fuel Type": car.fuel_type,
+  "Wheel Plan": car.wheel_plan
+ }));
+ downloadData(JSON.stringify(selectedCarsData, null, 2), 'selected_favourite_cars.json');
 };
 
 
