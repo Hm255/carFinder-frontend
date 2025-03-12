@@ -13,10 +13,6 @@ interface BackendError extends Error {
 const props = defineProps<{ notFound?: boolean }>()
 const error = ref<Error | null>(null)
 
-function tryAgain() {
-  error.value = null
-}
-
 onErrorCaptured((err, instance, info) => {
   console.error("Vue error captured:", err, info, instance)
   error.value = err
@@ -54,7 +50,7 @@ const errorMessage = computed(() => {
     <div v-if="error" class="error-display">
       <h2>Something went wrong.</h2>
       <p>{{ errorMessage }}</p>
-      <button @click="tryAgain">Try Again</button>
+      <router-link to="/" class="error-button">Home</router-link>
     </div>
     <div v-else>
       <slot />
@@ -78,7 +74,7 @@ const errorMessage = computed(() => {
 .error-display p {
   margin-bottom: 1rem;
 }
-.error-display button {
+.error-button {
   padding: 0.5rem 1rem;
   border: none;
   background-color: #cc6600;
