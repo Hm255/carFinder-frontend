@@ -25,7 +25,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const fetchCars = async (): Promise<Car[]> => {
   try {
-    const response = await axios.get<Car[]>(`${API_BASE_URL}api/cars`);
+    const response = await axios.get<Car[]>(`${API_BASE_URL}/api/cars`);
     return Array.isArray(response.data) ? response.data : [];
   } catch (error: any) {
     console.error('Error fetching cars:', error);
