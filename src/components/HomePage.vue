@@ -55,7 +55,6 @@ const randomiseCar = () => {
   }
 };
 
-
 const searchCars = () => {
   if (searchQuery.value.trim() !== '') {
     router.push({
@@ -76,7 +75,6 @@ const newAndAffordableCars = computed(() => {
       return a.price - b.price;
     });
 });
-console.log(newAndAffordableCars);
 
 const LuxuryCars = computed(() => {
   if (!cars.value.length) return [];
@@ -87,7 +85,6 @@ const LuxuryCars = computed(() => {
     return b.price - a.price;
   });
 });
-console.log(LuxuryCars);
 
 const showNewAndAffordable = () => {
   activeFilter.value = 'affordable';
@@ -110,10 +107,21 @@ onMounted(loadCars);
         type="text"
         v-model="searchQuery"
         placeholder="Search for cars..."
-        @keypress.enter="handleSearchKeyPress"
+        @keyup.enter="handleSearchKeyPress"
       />
       <button @click="searchCars">Search</button>
     </div>
+
+    <!-- Live match feedback -->
+    <div v-if="searchQuery.trim() !== '' && !loading">
+      <span v-if="filteredCars.length > 0">
+        {{ filteredCars.length }} match{{ filteredCars.length > 1 ? 'es' : '' }} found
+      </span>
+      <span v-else>
+        No matches found
+      </span>
+    </div>
+
     <div class="buttons">
       <button @click="() => router.push('/ComparisonPage')">Compare</button>
       <button @click="randomiseCar">Randomiser</button>
