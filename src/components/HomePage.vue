@@ -10,11 +10,11 @@ const cars = ref<Car[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const router = useRouter();
-const activeFilter = ref<string | null>(null);
 
 const loadCars = async () => {
   try {
-    cars.value = await fetchCars();
+    const result = await fetchCars();
+    cars.value = Array.isArray(result) ? result : [];
   } catch (err: any) {
     error.value = 'Failed to load cars.';
     console.error('Error:', err);
@@ -25,31 +25,24 @@ const loadCars = async () => {
 
 const filteredCars = computed(() => {
   const query = searchQuery.value.toLowerCase().trim();
-  if (!query) {
-    return cars.value;
-  }
-  return cars.value.filter(car => {
-    return (
-      car.make.toLowerCase().includes(query) ||
-      car.model.toLowerCase().includes(query) ||
-      car.color.toLowerCase().includes(query) ||
-      car.fuel_type.toLowerCase().includes(query) ||
-      car.registration_number.toLowerCase().includes(query)
-    );
-  });
+  if (!query) return cars.value;
+  return cars.value.filter(car =>
+    car.make.toLowerCase().includes(query) ||
+    car.model.toLowerCase().includes(query) ||
+    car.color.toLowerCase().includes(query) ||
+    car.fuel_type.toLowerCase().includes(query) ||
+    car.registration_number.toLowerCase().includes(query)
+  );
 });
 
 const handleSearchKeyPress = (event: KeyboardEvent) => {
-  if (event.key === 'Enter') {
-    searchCars();
-  }
+  if (event.key === 'Enter') searchCars();
 };
 
 const randomiseCar = () => {
   if (filteredCars.value.length > 0) {
     const randomIndex = Math.floor(Math.random() * filteredCars.value.length);
-    const car = filteredCars.value[randomIndex];
-    randomCar.value = car ?? null; 
+    randomCar.value = filteredCars.value[randomIndex] ?? null;
   } else {
     randomCar.value = null;
   }
@@ -64,34 +57,13 @@ const searchCars = () => {
   }
 };
 
-const newAndAffordableCars = computed(() => {
-  if (!cars.value.length) return [];
-  return cars.value
-    .filter(car => car.price <= 20000)
-    .sort((a, b) => {
-      if (a.year_of_manufacture !== b.year_of_manufacture) {
-        return b.year_of_manufacture - a.year_of_manufacture;
-      }
-      return a.price - b.price;
-    });
-});
-
-const LuxuryCars = computed(() => {
-  if (!cars.value.length) return [];
-  return [...cars.value].sort((a, b) => {
-    if (a.year_of_manufacture !== b.year_of_manufacture) {
-      return b.year_of_manufacture - a.year_of_manufacture;
-    }
-    return b.price - a.price;
-  });
-});
 
 const showNewAndAffordable = () => {
-  activeFilter.value = 'affordable';
+  router.push({ path: '/cars', query: { filter: 'affordable' } });
 };
 
 const showNewAndLuxury = () => {
-  activeFilter.value = 'luxury';
+  router.push({ path: '/cars', query: { filter: 'luxury' } });
 };
 
 onMounted(loadCars);
@@ -117,12 +89,10 @@ onMounted(loadCars);
       <span v-if="filteredCars.length > 0">
         {{ filteredCars.length }} match{{ filteredCars.length > 1 ? 'es' : '' }} found
       </span>
-      <span v-else>
-        No matches found
-      </span>
+      <span v-else>No matches found</span>
     </div>
 
-   
+    
     <div class="buttons">
       <button @click="() => router.push('/ComparisonPage')">Compare</button>
       <button @click="randomiseCar">Randomiser</button>
@@ -130,12 +100,8 @@ onMounted(loadCars);
 
     
     <div class="filter-buttons">
-      <button @click="showNewAndAffordable" :class="{ active: activeFilter === 'affordable' }">
-        New &amp; Affordable
-      </button>
-      <button @click="showNewAndLuxury" :class="{ active: activeFilter === 'luxury' }">
-        Luxury
-      </button>
+      <button @click="showNewAndAffordable">New &amp; Affordable</button>
+      <button @click="showNewAndLuxury">Luxury</button>
     </div>
 
     
@@ -151,25 +117,6 @@ onMounted(loadCars);
     </div>
 
     
-    <div v-if="activeFilter === 'affordable' && newAndAffordableCars.length">
-      <h2>New & Affordable Cars</h2>
-      <ul>
-        <li v-for="car in newAndAffordableCars" :key="car.registration_number">
-          {{ car.make }} {{ car.model }} - £{{ car.price }}
-        </li>
-      </ul>
-    </div>
-
-    <div v-if="activeFilter === 'luxury' && LuxuryCars.length">
-      <h2>Luxury Cars</h2>
-      <ul>
-        <li v-for="car in LuxuryCars" :key="car.registration_number">
-          {{ car.make }} {{ car.model }} - £{{ car.price }}
-        </li>
-      </ul>
-    </div>
-
-    <!-- Random car -->
     <RandomCar v-if="randomCar" :car="randomCar" />
   </div>
 </template>

@@ -24,10 +24,18 @@ export interface Car {
 
 export const fetchCars = async (): Promise<Car[]> => {
   try {
-    const response = await axios.get<Car[]>('/api/cars'); 
-    return response.data;
+    const response = await axios.get('/api/cars');
+    const payload = response.data;
+
+    
+    if (Array.isArray(payload)) return payload;
+    if (payload && Array.isArray(payload.cars)) return payload.cars;
+    if (payload && Array.isArray(payload.data)) return payload.data;
+
+    console.warn('Unexpected API response shape:', payload);
+    return [];
   } catch (error: any) {
     console.error('Error fetching cars:', error);
-    throw error; 
+    return [];
   }
 };
