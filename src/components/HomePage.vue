@@ -101,7 +101,7 @@ onMounted(loadCars);
   <div class="main-content">
     <h1>CarFinder</h1>
 
-    <!-- Search -->
+    
     <div class="search-group">
       <input
         type="text"
@@ -112,7 +112,7 @@ onMounted(loadCars);
       <button @click="searchCars">Search</button>
     </div>
 
-    <!-- Live match feedback -->
+    
     <div v-if="searchQuery.trim() !== '' && !loading">
       <span v-if="filteredCars.length > 0">
         {{ filteredCars.length }} match{{ filteredCars.length > 1 ? 'es' : '' }} found
@@ -122,13 +122,13 @@ onMounted(loadCars);
       </span>
     </div>
 
-    <!-- Action buttons -->
+   
     <div class="buttons">
       <button @click="() => router.push('/ComparisonPage')">Compare</button>
       <button @click="randomiseCar">Randomiser</button>
     </div>
 
-    <!-- Filter buttons -->
+    
     <div class="filter-buttons">
       <button @click="showNewAndAffordable" :class="{ active: activeFilter === 'affordable' }">
         New &amp; Affordable
@@ -138,11 +138,11 @@ onMounted(loadCars);
       </button>
     </div>
 
-    <!-- Loading / Error -->
+    
     <div v-if="loading">Loading cars...</div>
     <div v-else-if="error">{{ error }}</div>
 
-    <!-- Search guidance -->
+    
     <div v-if="searchQuery.length === 0">
       Type before pressing search
     </div>
@@ -150,7 +150,7 @@ onMounted(loadCars);
       No cars found matching your search.
     </div>
 
-    <!-- Filtered lists -->
+    
     <div v-if="activeFilter === 'affordable' && newAndAffordableCars.length">
       <h2>New & Affordable Cars</h2>
       <ul>
