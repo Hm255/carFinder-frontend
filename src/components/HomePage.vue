@@ -49,7 +49,7 @@ const randomiseCar = () => {
   if (filteredCars.value.length > 0) {
     const randomIndex = Math.floor(Math.random() * filteredCars.value.length);
     const car = filteredCars.value[randomIndex];
-    randomCar.value = car ?? null; // null if undefined
+    randomCar.value = car ?? null; 
   } else {
     randomCar.value = null;
   }
