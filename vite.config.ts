@@ -10,7 +10,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: "frontend", // or any directory that matches your hosting settings
+    outDir: "Dist",
   },
   server: {
     proxy: {
