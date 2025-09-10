@@ -21,21 +21,14 @@ export interface Car {
   date_of_manufacture: string;
   tax_status: string;
 }
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const fetchCars = async (): Promise<Car[]> => {
   try {
-    const response = await axios.get('/api/cars');
-    const payload = response.data;
-
-    
-    if (Array.isArray(payload)) return payload;
-    if (payload && Array.isArray(payload.cars)) return payload.cars;
-    if (payload && Array.isArray(payload.data)) return payload.data;
-
-    console.warn('Unexpected API response shape:', payload);
-    return [];
+    const response = await axios.get<Car[]>(`${API_BASE_URL}/api/cars`);
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error: any) {
     console.error('Error fetching cars:', error);
-    return [];
+    throw error;
   }
 };
