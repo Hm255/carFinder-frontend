@@ -30,7 +30,6 @@ onMounted(async () => {
     }
   } catch (err: any) {
     error.value = 'Failed to load car details.'; 
-    console.error('Error:', err);
   } finally {
     loading.value = false;
   }
@@ -57,7 +56,6 @@ const formatDate = (dateString: string): string => {
             day: 'numeric',
         });
     } catch (error) {
-      console.error("Error parsing date:", dateString, error);
       return 'Invalid Date';
     }
 };

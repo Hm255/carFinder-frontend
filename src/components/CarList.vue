@@ -46,7 +46,6 @@ const loadCars = async () => {
     cars.value = await fetchCars();
   } catch (err: any) {
     error.value = 'Failed to load cars.';
-    console.error('Error:', err);
   } finally {
     loading.value = false;
   }
@@ -133,7 +132,6 @@ const sortedCars = computed(() => {
 });
 
 onMounted(() => {
-  console.log('mounted')
   loadCars();
   const storedFavourites = localStorage.getItem('favourites');
   if (storedFavourites) {

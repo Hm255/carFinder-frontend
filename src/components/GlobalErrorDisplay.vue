@@ -13,8 +13,7 @@ interface BackendError extends Error {
 const props = defineProps<{ notFound?: boolean }>()
 const error = ref<Error | null>(null)
 
-onErrorCaptured((err, instance, info) => {
-  console.error("Vue error captured:", err, info, instance)
+onErrorCaptured((err) => {
   error.value = err
   return false
 })
@@ -22,7 +21,6 @@ onErrorCaptured((err, instance, info) => {
 axios.interceptors.response.use(
   response => response,
   err => {
-    console.error("Backend error captured:", err)
     error.value = err
     return Promise.reject(err)
   }

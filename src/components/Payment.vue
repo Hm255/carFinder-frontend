@@ -31,7 +31,7 @@ onMounted(async () => {
     }
   } catch (err) {
     error.value = 'Failed to load car details.';
-    console.error('Error fetching car:', err);
+    
   } finally {
     loading.value = false;
   }
@@ -44,7 +44,7 @@ const completePayment = () => {
       params: { registrationNumber: registrationNumber.value },
     });
   } else {
-    console.error('Registration Number does not exist');
+   throw error
   }
 };
 </script>

@@ -15,7 +15,6 @@ const loadCars = async () => {
     cars.value = await fetchCars();
   } catch (err: any) {
     error.value = 'Failed to load cars.';
-    console.error('Error:', err);
   } finally {
     loading.value = false;
   }

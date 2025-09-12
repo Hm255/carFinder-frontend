@@ -17,7 +17,6 @@ const loadCars = async () => {
     cars.value = Array.isArray(result) ? result : [];
   } catch (err: any) {
     error.value = 'Failed to load cars.';
-    console.error('Error:', err);
   } finally {
     loading.value = false;
   }
