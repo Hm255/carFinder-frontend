@@ -208,7 +208,7 @@ button:hover {
 .video-container {
   position: relative;
   width: 100%;
-  max-width: 560px;
+  max-width: auto;
   margin: 1rem auto;
   padding-bottom: 56.25%; 
   height: 0;
