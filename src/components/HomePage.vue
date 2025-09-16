@@ -111,7 +111,7 @@ onMounted(loadCars);
     <div v-if="searchQuery.length === 0">
       Type before pressing search
     </div>
-    <iframe width="420" height="315" src="www.youtube.com/embed/WgWzd60XmUY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+    <iframe width="420" height="315" src="https://youtube.com/embed/WgWzd60XmUY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
     </iframe>
     <div v-if="!loading && filteredCars.length === 0 && searchQuery.trim() !== ''">
       No cars found matching your search.
