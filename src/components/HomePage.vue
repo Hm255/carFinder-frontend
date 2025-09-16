@@ -11,6 +11,9 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 const router = useRouter();
 
+const videoId = 'WgWzd60XmUY';
+const showVideo = ref(false);
+
 const loadCars = async () => {
   try {
     const result = await fetchCars();
@@ -64,7 +67,12 @@ const showNewAndLuxury = () => {
   router.push({ path: '/cars', query: { filter: 'luxury' } });
 };
 
-onMounted(loadCars);
+onMounted(() => {
+  loadCars();
+  setTimeout(() => {
+    showVideo.value = true;
+  }, 800); 
+});
 </script>
 
 <template>
@@ -105,15 +113,17 @@ onMounted(loadCars);
       Type before pressing search
     </div>
 
-    <iframe
-      width="420"
-      height="315"
-      src="https://youtube.com/embed/WgWzd60XmUY"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen>
-    </iframe>
+    
+    <div class="video-container" v-if="showVideo">
+      <iframe
+        :src="`https://www.youtube.com/embed/${videoId}`"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+    </div>
 
     <div v-if="!loading && filteredCars.length === 0 && searchQuery.trim() !== ''">
       No cars found matching your search.
@@ -122,7 +132,6 @@ onMounted(loadCars);
     <RandomCar v-if="randomCar" :car="randomCar" />
   </div>
 </template>
-
 <style scoped>
 .main-content {
   padding: 2rem;
@@ -135,11 +144,13 @@ onMounted(loadCars);
   flex-direction: column;
   align-items: center;
 }
+
 h1 {
   font-size: 3rem;
   margin-bottom: 1.5rem;
   color: var(--text-color);
 }
+
 .search-group {
   display: flex;
   align-items: center;
@@ -148,6 +159,7 @@ h1 {
   width: 60%;
   max-width: 800px;
 }
+
 input[type="text"] {
   padding: 0.75rem;
   font-size: 1.2rem;
@@ -155,12 +167,14 @@ input[type="text"] {
   border-radius: 8px;
   flex: 1;
 }
+
 .buttons {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
   margin-bottom: 1rem;
 }
+
 button {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -170,19 +184,42 @@ button {
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 button:hover {
   background-color: #e0ac00;
 }
+
 .filter-buttons {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin-bottom: 1rem;
 }
+
 .active {
   background-color: #e0ac00;
 }
+
 .main-content > div {
   width: 100%;
 }
+
+
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: 1rem auto;
+  padding-bottom: 56.25%; 
+  height: 0;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 </style>
+
