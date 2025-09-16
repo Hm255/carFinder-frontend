@@ -11,13 +11,6 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 const router = useRouter();
 
-const videoId = 'WgWzd60XmUY';
-const isPlayerVisible = ref(false);
-
-const showPlayer = () => {
-  isPlayerVisible.value = true;
-};
-
 const loadCars = async () => {
   try {
     const result = await fetchCars();
@@ -63,7 +56,6 @@ const searchCars = () => {
   }
 };
 
-
 const showNewAndAffordable = () => {
   router.push({ path: '/cars', query: { filter: 'affordable' } });
 };
@@ -79,7 +71,6 @@ onMounted(loadCars);
   <div class="main-content">
     <h1>CarFinder</h1>
 
-    
     <div class="search-group">
       <input
         type="text"
@@ -90,7 +81,6 @@ onMounted(loadCars);
       <button @click="searchCars">Search</button>
     </div>
 
-    
     <div v-if="searchQuery.trim() !== '' && !loading">
       <span v-if="filteredCars.length > 0">
         {{ filteredCars.length }} match{{ filteredCars.length > 1 ? 'es' : '' }} found
@@ -98,51 +88,37 @@ onMounted(loadCars);
       <span v-else>No matches found</span>
     </div>
 
-    
     <div class="buttons">
       <button @click="() => router.push('/ComparisonPage')">Compare</button>
       <button @click="randomiseCar">Randomiser</button>
     </div>
 
-    
     <div class="filter-buttons">
       <button @click="showNewAndAffordable">New &amp; Affordable</button>
       <button @click="showNewAndLuxury">Luxury</button>
     </div>
 
-    
     <div v-if="loading">Loading cars...</div>
     <div v-else-if="error">{{ error }}</div>
 
-    
     <div v-if="searchQuery.length === 0">
       Type before pressing search
     </div>
-     <div class="video-wrapper">
-    <div v-if="!isPlayerVisible" class="video-thumbnail" @click="showPlayer">
-      <img
-        :src="`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`"
-        :alt="'YouTube video thumbnail'"
-      />
-      <div class="play-button"></div>
-    </div>
+
     <iframe
-      v-else
-      width="560"
+      width="420"
       height="315"
-      :src="`https://www.youtube.com/embed/${videoId}?autoplay=1`"
+      src="https://youtube.com/embed/WgWzd60XmUY"
       title="YouTube video player"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      loading="lazy"
-    ></iframe>
-  </div>
+      allowfullscreen>
+    </iframe>
+
     <div v-if="!loading && filteredCars.length === 0 && searchQuery.trim() !== ''">
       No cars found matching your search.
     </div>
 
-    
     <RandomCar v-if="randomCar" :car="randomCar" />
   </div>
 </template>
@@ -208,45 +184,5 @@ button:hover {
 }
 .main-content > div {
   width: 100%;
-}
-.video-container {
-  position: relative;
-  width: 100%;
-  max-width: 560px;
-  margin: 1rem auto;
-  padding-bottom: 56.25%; 
-  height: 0;
-}
-
-.video-container iframe,
-.video-thumbnail {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.video-thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 68px;
-  height: 48px;
-  background: url('https://www.gstatic.com/images/icons/material/system/1x/play_arrow_white_48dp.png') no-repeat center center;
-  background-size: contain;
-  opacity: 0.85;
-  transition: opacity 0.3s ease;
-}
-
-.play-button:hover {
-  opacity: 1;
 }
 </style>
